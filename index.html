@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nexfus Africa Stock Intelligence</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --gold:#C9A84C;--gold-light:#E8C97A;--gold-dim:#8A6E30;
+  --bg-deep:#0D0F14;--bg-panel:#13161E;--bg-card:#1A1D28;--bg-elevated:#21263A;
+  --text-primary:#F0EDE4;--text-secondary:#9A9790;--text-muted:#5A5855;
+  --border:rgba(201,168,76,0.15);--border-subtle:rgba(255,255,255,0.06);
+  --green:#3DCB8A;--red:#F05C5C;--teal:#1EB8A0;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg-deep);color:var(--text-primary);min-height:100vh;overflow-x:hidden}
+
+/* HEADER */
+.header{background:var(--bg-panel);border-bottom:1px solid var(--border);padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between;height:58px;position:sticky;top:0;z-index:100}
+.logo{display:flex;align-items:center;gap:9px}
+.logo-icon{width:33px;height:33px;background:linear-gradient(135deg,var(--gold),var(--gold-dim));border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:16px;color:#0D0F14;font-weight:700}
+.logo-text{font-family:'Playfair Display',serif;font-size:18px;color:var(--gold-light);letter-spacing:.02em}
+.logo-sub{font-size:10px;color:var(--text-muted);letter-spacing:.08em;text-transform:uppercase;font-weight:500}
+.nav-pills{display:flex;gap:3px;background:var(--bg-card);border-radius:10px;padding:3px}
+.nav-pill{padding:5px 12px;border-radius:7px;border:none;background:transparent;color:var(--text-secondary);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;transition:all .2s}
+.nav-pill.active{background:var(--bg-elevated);color:var(--gold-light);border:1px solid var(--border)}
+.header-right{display:flex;align-items:center;gap:8px}
+.live-badge{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--green);background:rgba(61,203,138,.1);border:1px solid rgba(61,203,138,.2);border-radius:20px;padding:3px 9px;font-weight:600;letter-spacing:.06em;display:none}
+.mkt-badge{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text-secondary);background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:20px;padding:4px 10px}
+.mkt-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.gear-btn{width:31px;height:31px;background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:7px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;transition:all .2s;color:var(--text-secondary)}
+.gear-btn:hover{border-color:var(--border);color:var(--gold-light)}
+
+/* FX BAR */
+.fx-bar{background:var(--bg-panel);border-bottom:1px solid var(--border-subtle);padding:5px 1.5rem;display:flex;align-items:center;gap:18px;overflow-x:auto;min-height:32px}
+.fx-bar::-webkit-scrollbar{display:none}
+.fx-lbl{font-size:9px;font-weight:700;letter-spacing:.1em;color:var(--text-muted);text-transform:uppercase;white-space:nowrap}
+.fx-item{display:flex;align-items:center;gap:5px;white-space:nowrap}
+.fx-pair{font-size:10px;font-weight:600;letter-spacing:.05em;color:var(--text-muted)}
+.fx-rate{font-family:'DM Mono',monospace;font-size:11px;color:var(--text-primary);font-weight:500}
+.fx-sep{width:1px;height:12px;background:var(--border-subtle);flex-shrink:0}
+.fx-ts{font-size:10px;color:var(--text-muted);margin-left:auto;white-space:nowrap}
+.fx-spin{font-size:10px;color:var(--text-muted);font-style:italic}
+
+/* LAYOUT */
+.layout{display:grid;grid-template-columns:270px 1fr;min-height:calc(100vh - 90px)}
+
+/* SIDEBAR */
+.sidebar{background:var(--bg-panel);border-right:1px solid var(--border-subtle);overflow-y:auto;padding:.9rem;display:flex;flex-direction:column;gap:1.1rem}
+.sb-title{font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted);margin-bottom:5px;display:flex;align-items:center;justify-content:space-between}
+.sb-refresh{font-size:10px;color:var(--gold-dim);cursor:pointer;background:none;border:none;font-family:'DM Sans',sans-serif;transition:color .2s}
+.sb-refresh:hover{color:var(--gold-light)}
+.wl-item{display:flex;align-items:center;justify-content:space-between;padding:8px 9px;border-radius:9px;cursor:pointer;transition:all .2s;border:1px solid transparent;margin-bottom:3px}
+.wl-item:hover{background:var(--bg-card);border-color:var(--border)}
+.wl-ticker{font-family:'DM Mono',monospace;font-size:11px;font-weight:500;color:var(--gold-light);margin-bottom:1px}
+.wl-name{font-size:10px;color:var(--text-secondary)}
+.wl-right{text-align:right}
+.wl-val{font-family:'DM Mono',monospace;font-size:11px;font-weight:500;color:var(--text-primary);margin-bottom:1px}
+.wl-chg{font-family:'DM Mono',monospace;font-size:10px;font-weight:500}
+.wl-chg.p{color:var(--green)}.wl-chg.n{color:var(--red)}
+
+/* MAIN */
+.main{display:flex;flex-direction:column;overflow:hidden}
+.tab-view{display:none;flex-direction:column;height:100%}
+.tab-view.active{display:flex}
+
+/* PICKER */
+.picker-wrap{flex:1;display:flex;flex-direction:column;padding:1.5rem;gap:1.1rem;overflow-y:auto}
+.hero{text-align:center;padding:.8rem 0 .3rem}
+.hero h1{font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--gold-light);margin-bottom:5px}
+.hero p{font-size:13px;color:var(--text-secondary);max-width:460px;margin:0 auto;line-height:1.6}
+.sec-lbl{font-size:9px;font-weight:700;letter-spacing:.1em;color:var(--text-muted);text-transform:uppercase;padding:0 0 5px;border-bottom:1px solid var(--border-subtle);margin-bottom:9px}
+.qp-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.qp-btn{padding:9px 6px;background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:9px;color:var(--text-secondary);font-family:'DM Sans',sans-serif;font-size:11px;font-weight:500;cursor:pointer;transition:all .2s;text-align:center;line-height:1.4}
+.qp-btn:hover{background:var(--bg-elevated);border-color:var(--border);color:var(--gold-light)}
+.input-row{display:flex;gap:7px}
+.stock-inp{flex:1;background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:12px 14px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text-primary);outline:none;transition:border-color .2s}
+.stock-inp::placeholder{color:var(--text-muted)}
+.stock-inp:focus{border-color:var(--gold-dim)}
+.go-btn{padding:12px 22px;background:linear-gradient(135deg,var(--gold),var(--gold-dim));border:none;border-radius:10px;color:#0D0F14;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;white-space:nowrap}
+.go-btn:hover{filter:brightness(1.1);transform:translateY(-1px)}
+.go-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+
+/* CHART PANEL */
+.chart-panel{background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:13px;overflow:hidden;display:none}
+.chart-hdr{padding:9px 14px;background:var(--bg-elevated);border-bottom:1px solid var(--border-subtle);display:flex;align-items:center;justify-content:space-between}
+.chart-sym{font-family:'DM Mono',monospace;font-size:12px;color:var(--gold-light);font-weight:500}
+.chart-sel{background:var(--bg-card);border:1px solid var(--border);border-radius:6px;color:var(--text-primary);font-family:'DM Sans',sans-serif;font-size:11px;padding:3px 7px;outline:none;cursor:pointer}
+.chart-sel option{background:var(--bg-panel)}
+
+/* RESPONSE */
+.res-card{background:var(--bg-card);border:1px solid var(--border);border-radius:13px;overflow:hidden;display:none}
+.res-card.on{display:block}
+.res-hdr{background:var(--bg-elevated);border-bottom:1px solid var(--border-subtle);padding:.85rem 1.2rem;display:flex;align-items:center;gap:9px}
+.av-circle{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-dim));display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.coach-nm{font-size:13px;font-weight:600;color:var(--gold-light)}
+.coach-ti{font-size:10px;color:var(--text-secondary)}
+.res-body{padding:1.2rem;min-height:90px}
+.res-txt{font-size:13px;line-height:1.75;color:var(--text-primary);white-space:pre-wrap}
+.dots{display:flex;gap:5px;align-items:center;padding:5px 0}
+.dots span{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:bop 1.2s infinite}
+.dots span:nth-child(2){animation-delay:.2s}.dots span:nth-child(3){animation-delay:.4s}
+@keyframes bop{0%,100%{transform:translateY(0);opacity:.5}50%{transform:translateY(-5px);opacity:1}}
+.disc{padding:7px 1.2rem;border-top:1px solid var(--border-subtle);font-size:10px;color:var(--text-muted);background:var(--bg-elevated)}
+.cursor{display:inline-block;width:2px;height:12px;background:var(--gold);margin-left:2px;vertical-align:middle;animation:blink .7s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.err{color:var(--red);font-size:12px}
+
+/* CHARTS TAB */
+.charts-wrap{padding:1.5rem;overflow-y:auto;display:flex;flex-direction:column;gap:1.2rem}
+.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.mini-card{background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:11px;overflow:hidden}
+.mini-hdr{padding:9px 12px;background:var(--bg-elevated);border-bottom:1px solid var(--border-subtle);display:flex;align-items:center;justify-content:space-between}
+.mini-ticker{font-family:'DM Mono',monospace;font-size:12px;color:var(--gold-light);font-weight:500}
+.mini-name{font-size:10px;color:var(--text-secondary)}
+.mini-ask{font-size:10px;color:var(--text-muted);background:none;border:1px solid var(--border-subtle);border-radius:5px;padding:2px 7px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s}
+.mini-ask:hover{color:var(--gold-light);border-color:var(--border)}
+
+/* NEWS TAB */
+.news-wrap{padding:1.5rem;overflow-y:auto;display:flex;flex-direction:column;gap:.9rem}
+.news-top{display:flex;align-items:center;justify-content:space-between}
+.news-top h2{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--gold-light)}
+.src-pills{display:flex;gap:5px}
+.src-btn{padding:4px 11px;background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:20px;font-size:11px;font-weight:500;color:var(--text-secondary);cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif}
+.src-btn.active{background:var(--bg-elevated);border-color:var(--border);color:var(--gold-light)}
+.news-card{background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:11px;padding:1rem 1.1rem;cursor:pointer;transition:all .2s}
+.news-card:hover{border-color:var(--border);background:var(--bg-elevated)}
+.news-src{font-size:9px;font-weight:700;letter-spacing:.08em;color:var(--gold-dim);text-transform:uppercase;margin-bottom:4px}
+.news-ttl{font-size:13px;font-weight:500;color:var(--text-primary);line-height:1.45;margin-bottom:5px}
+.news-dsc{font-size:11px;color:var(--text-secondary);line-height:1.5;margin-bottom:7px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.news-foot{display:flex;align-items:center;gap:10px}
+.news-dt{font-size:10px;color:var(--text-muted)}
+.news-ask{font-size:10px;color:var(--teal);background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif}
+.news-ask:hover{opacity:.7}
+.news-empty{text-align:center;padding:2.5rem;color:var(--text-muted);font-size:13px;background:var(--bg-card);border-radius:11px;border:1px solid var(--border-subtle)}
+
+/* MARKETS */
+.mkt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:.9rem;padding:1.5rem}
+.mkt-card{background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:12px;padding:1.1rem;transition:border-color .2s}
+.mkt-card:hover{border-color:var(--border)}
+.mkt-flag{font-size:20px;margin-bottom:6px}
+.mkt-exc{font-size:9px;font-weight:700;letter-spacing:.08em;color:var(--text-muted);text-transform:uppercase;margin-bottom:2px}
+.mkt-ctry{font-size:13px;font-weight:500;color:var(--text-primary);margin-bottom:9px}
+.mkt-idx{font-family:'DM Mono',monospace;font-size:18px;font-weight:500;color:var(--gold-light);margin-bottom:3px}
+.mkt-dsc{font-size:11px;color:var(--text-secondary);line-height:1.5}
+.mkt-btn{margin-top:9px;width:100%;padding:6px;background:transparent;border:1px solid var(--border);border-radius:7px;color:var(--gold);font-family:'DM Sans',sans-serif;font-size:11px;font-weight:500;cursor:pointer;transition:all .2s}
+.mkt-btn:hover{background:var(--bg-elevated)}
+
+/* PORTFOLIO */
+.pf-wrap{padding:1.5rem;display:flex;flex-direction:column;gap:1.1rem;overflow-y:auto}
+.sec-card{background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:12px;padding:1.2rem}
+.sec-card h3{font-size:11px;font-weight:600;color:var(--text-secondary);letter-spacing:.07em;text-transform:uppercase;margin-bottom:.9rem}
+.stats3{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:.9rem}
+.stat-chip{background:var(--bg-elevated);border-radius:8px;padding:9px}
+.s-lbl{font-size:9px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px}
+.s-val{font-family:'DM Mono',monospace;font-size:15px;font-weight:500;color:var(--gold-light)}
+.pf-row{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:7px;align-items:center;margin-bottom:6px}
+.pf-inp{background:var(--bg-elevated);border:1px solid var(--border-subtle);border-radius:7px;padding:8px 10px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text-primary);outline:none}
+.pf-inp:focus{border-color:var(--border)}
+.pf-inp::placeholder{color:var(--text-muted)}
+.pf-rm{background:transparent;border:1px solid var(--border-subtle);border-radius:7px;color:var(--red);width:31px;height:31px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:background .2s}
+.pf-rm:hover{background:rgba(240,92,92,.1)}
+.add-btn{background:transparent;border:1px dashed var(--border);border-radius:8px;color:var(--text-secondary);font-family:'DM Sans',sans-serif;font-size:12px;padding:9px;cursor:pointer;transition:all .2s;width:100%}
+.add-btn:hover{border-color:var(--gold-dim);color:var(--gold-light)}
+.risk-row{display:flex;gap:6px}
+.risk-opt{flex:1;padding:8px;background:var(--bg-elevated);border:1px solid var(--border-subtle);border-radius:8px;text-align:center;cursor:pointer;transition:all .2s;font-size:11px;font-weight:500;color:var(--text-secondary)}
+.risk-opt.active{border-color:var(--gold-dim);color:var(--gold-light);background:rgba(201,168,76,.08)}
+.build-btn{background:linear-gradient(135deg,var(--gold),var(--gold-dim));border:none;border-radius:9px;padding:10px 20px;color:#0D0F14;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s}
+.build-btn:hover{filter:brightness(1.1)}
+.build-btn:disabled{opacity:.5;cursor:not-allowed}
+
+/* SETTINGS MODAL */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:999;display:none;align-items:center;justify-content:center}
+.overlay.open{display:flex}
+.modal{background:var(--bg-panel);border:1px solid var(--border);border-radius:15px;padding:1.7rem;width:470px;max-width:90vw}
+.modal h2{font-family:'Playfair Display',serif;font-size:1.25rem;color:var(--gold-light);margin-bottom:3px}
+.modal-sub{font-size:12px;color:var(--text-secondary);margin-bottom:1.3rem;line-height:1.5}
+.m-sec{margin-bottom:1.1rem}
+.m-lbl{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);margin-bottom:5px}
+.m-inp{width:100%;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-family:'DM Mono',monospace;font-size:12px;color:var(--text-primary);outline:none;transition:border-color .2s}
+.m-inp:focus{border-color:var(--gold-dim)}
+.m-inp::placeholder{color:var(--text-muted);font-family:'DM Sans',sans-serif;font-size:11px}
+.m-hint{font-size:10px;color:var(--text-muted);margin-top:4px;line-height:1.5}
+.m-hint a{color:var(--teal);text-decoration:none}
+.m-status{display:flex;align-items:center;gap:5px;margin-top:4px;font-size:10px}
+.st-dot{width:5px;height:5px;border-radius:50%}
+.st-dot.on{background:var(--green)}.st-dot.off{background:var(--text-muted)}
+.free-box{background:var(--bg-elevated);border-radius:9px;padding:11px;border:1px solid var(--border-subtle);margin-bottom:1.1rem;font-size:11px;color:var(--text-secondary);line-height:1.75}
+.m-acts{display:flex;gap:7px;justify-content:flex-end;margin-top:1.3rem}
+.m-cancel{padding:8px 16px;background:transparent;border:1px solid var(--border-subtle);border-radius:8px;color:var(--text-secondary);font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;transition:all .2s}
+.m-cancel:hover{border-color:var(--border);color:var(--text-primary)}
+.m-save{padding:8px 16px;background:linear-gradient(135deg,var(--gold),var(--gold-dim));border:none;border-radius:8px;color:#0D0F14;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer}
+
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="logo">
+    <div class="logo-icon">N</div>
+    <div>
+      <div class="logo-text">Nexfus</div>
+      <div class="logo-sub">Africa Stock Intelligence</div>
+    </div>
+  </div>
+  <div class="nav-pills">
+    <button class="nav-pill active" onclick="showTab('picker',this)">Stock Picker</button>
+    <button class="nav-pill" onclick="showTab('charts',this)">Live Charts</button>
+    <button class="nav-pill" onclick="showTab('news',this)">News</button>
+    <button class="nav-pill" onclick="showTab('markets',this)">Markets</button>
+    <button class="nav-pill" onclick="showTab('portfolio',this)">Portfolio</button>
+  </div>
+  <div class="header-right">
+    <div class="mkt-badge"><span class="mkt-dot"></span><span>NGX · JSE · GSE · NSE</span></div>
+    <div class="live-badge" id="live-badge">⚡ LIVE DATA</div>
+    <div class="gear-btn" onclick="openSettings()" title="Settings & API Keys">⚙</div>
+  </div>
+</header>
+
+<!-- FX TICKER -->
+<div class="fx-bar" id="fx-bar">
+  <div class="fx-lbl">LIVE FX</div>
+  <div class="fx-spin" id="fx-spin">Loading...</div>
+  <div id="fx-rates" style="display:flex;align-items:center;gap:16px;"></div>
+  <div class="fx-ts" id="fx-ts"></div>
+</div>
+
+<div class="layout">
+  <aside class="sidebar">
+    <div>
+      <div class="sb-title">🇳🇬 NGX Blue Chips<button class="sb-refresh" onclick="fetchFX()">↻</button></div>
+      <div id="ngx-list"></div>
+    </div>
+    <div>
+      <div class="sb-title">🌍 Pan-African</div>
+      <div id="africa-list"></div>
+    </div>
+    <div>
+      <div class="sb-title">💱 FX Rates</div>
+      <div id="fx-sidebar"></div>
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <!-- PICKER TAB -->
+    <div class="tab-view active" id="tab-picker">
+      <div class="picker-wrap">
+        <div class="hero">
+          <h1>Coach Ndubuisi's Stock Picker</h1>
+          <p>Expert AI analysis on any Nigerian or African stock — data-driven, profit-first intelligence.</p>
+        </div>
+        <div>
+          <div class="sec-lbl">Quick Analysis</div>
+          <div class="qp-grid" id="qp-grid"></div>
+        </div>
+        <div>
+          <div class="sec-lbl">Ask the Coach</div>
+          <div class="input-row">
+            <input type="text" class="stock-inp" id="stock-q" placeholder="e.g. 'Analyse Zenith Bank' or 'Best NGX dividend stocks 2025'" />
+            <button class="go-btn" id="go-btn" onclick="analyzeStock()">Analyse ↗</button>
+          </div>
+        </div>
+        <div class="chart-panel" id="chart-panel">
+          <div class="chart-hdr">
+            <div class="chart-sym" id="chart-sym">NGX:DANGCEM</div>
+            <select class="chart-sel" id="chart-sel" onchange="updateChart(this.value)">
+              <option value="NGX:DANGCEM">DANGCEM</option>
+              <option value="NGX:ZENITHBANK">ZENITHBANK</option>
+              <option value="NGX:MTNN">MTNN</option>
+              <option value="NGX:GTCO">GTCO</option>
+              <option value="NGX:AIRTELAFRI">AIRTELAFRI</option>
+              <option value="NGX:BUAFOODS">BUAFOODS</option>
+              <option value="NGX:SEPLAT">SEPLAT</option>
+              <option value="NGX:ACCESS">ACCESS</option>
+              <option value="JSE:NPN">JSE: Naspers</option>
+              <option value="NSE:SCOM">NSE: Safaricom</option>
+            </select>
+          </div>
+          <div id="tv-main" style="height:360px;"></div>
+        </div>
+        <div class="res-card" id="res-card">
+          <div class="res-hdr">
+            <div class="av-circle">🎯</div>
+            <div><div class="coach-nm">Coach Ndubuisi Okonkwo</div><div class="coach-ti">Senior Investment Strategist · <span id="ai-engine-label">AI Powered</span></div></div>
+          </div>
+          <div class="res-body">
+            <div class="dots" id="dots"><span></span><span></span><span></span></div>
+            <div class="res-txt" id="res-txt"></div>
+          </div>
+          <div class="disc">⚠️ Educational only — not licensed financial advice. Consult a SEC-registered broker before investing. Past performance ≠ future results.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CHARTS TAB -->
+    <div class="tab-view" id="tab-charts">
+      <div class="charts-wrap">
+        <div>
+          <div style="font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--gold-light);margin-bottom:3px">Live Charts</div>
+          <div style="font-size:11px;color:var(--text-secondary)">Real-time price charts via TradingView · Click "Ask Coach" on any chart for AI analysis</div>
+        </div>
+        <div class="charts-grid" id="charts-grid"></div>
+      </div>
+    </div>
+
+    <!-- NEWS TAB -->
+    <div class="tab-view" id="tab-news">
+      <div class="news-wrap">
+        <div class="news-top">
+          <h2>Market News</h2>
+          <div class="src-pills">
+            <button class="src-btn active" onclick="loadNews('nairametrics',this)">Nairametrics</button>
+            <button class="src-btn" onclick="loadNews('businessday',this)">BusinessDay</button>
+            <button class="src-btn" onclick="loadNews('guardian',this)">Guardian NG</button>
+          </div>
+        </div>
+        <div id="news-list"><div class="news-empty">Loading latest news...</div></div>
+      </div>
+    </div>
+
+    <!-- MARKETS TAB -->
+    <div class="tab-view" id="tab-markets">
+      <div class="mkt-grid" id="mkt-grid"></div>
+    </div>
+
+    <!-- PORTFOLIO TAB -->
+    <div class="tab-view" id="tab-portfolio">
+      <div class="pf-wrap">
+        <div class="sec-card">
+          <h3>Portfolio Builder</h3>
+          <div class="stats3">
+            <div class="stat-chip"><div class="s-lbl">Holdings</div><div class="s-val" id="s-count">0</div></div>
+            <div class="stat-chip"><div class="s-lbl">Est. Value</div><div class="s-val" id="s-val">₦0</div></div>
+            <div class="stat-chip"><div class="s-lbl">Risk</div><div class="s-val" id="s-risk">—</div></div>
+          </div>
+          <div class="sec-lbl" style="margin-top:.8rem">Holdings</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:7px;margin-bottom:5px;padding:0 1px">
+            <div style="font-size:10px;color:var(--text-muted)">Ticker</div>
+            <div style="font-size:10px;color:var(--text-muted)">Units</div>
+            <div style="font-size:10px;color:var(--text-muted)">Avg Price (₦)</div>
+            <div></div>
+          </div>
+          <div id="h-list"></div>
+          <button class="add-btn" onclick="addH()">+ Add Holding</button>
+        </div>
+        <div class="sec-card">
+          <h3>Risk Tolerance</h3>
+          <div class="risk-row">
+            <div class="risk-opt active" onclick="setRisk(this,'Conservative')">🛡️ Conservative</div>
+            <div class="risk-opt" onclick="setRisk(this,'Balanced')">⚖️ Balanced</div>
+            <div class="risk-opt" onclick="setRisk(this,'Aggressive')">🚀 Aggressive</div>
+          </div>
+        </div>
+        <div class="sec-card">
+          <h3>Investment Goal</h3>
+          <input type="text" class="pf-inp" id="pf-goal" placeholder="e.g. Grow ₦5M to ₦20M in 5 years..." style="width:100%" />
+        </div>
+        <button class="build-btn" id="bld-btn" onclick="buildPF()">Get Portfolio Analysis ↗</button>
+        <div class="res-card" id="pf-res">
+          <div class="res-hdr">
+            <div class="av-circle">📊</div>
+            <div><div class="coach-nm">Portfolio Review — Coach Ndubuisi</div><div class="coach-ti">Personalised wealth strategy analysis</div></div>
+          </div>
+          <div class="res-body">
+            <div class="dots" id="pf-dots"><span></span><span></span><span></span></div>
+            <div class="res-txt" id="pf-txt"></div>
+          </div>
+          <div class="disc">⚠️ Educational only. Always consult a SEC-registered broker before investing.</div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- SETTINGS MODAL -->
+<div class="overlay" id="settings-modal">
+  <div class="modal">
+    <h2>Settings & Data Sources</h2>
+    <p class="modal-sub">Add API keys to unlock live stock quotes, fundamentals, and earnings data alongside the free features below.</p>
+    <!-- AI ENGINE SELECTOR -->
+    <div class="m-sec" style="background:rgba(201,168,76,0.06);border:1px solid var(--border);border-radius:10px;padding:12px">
+      <div class="m-lbl" style="color:var(--gold-light);margin-bottom:10px">🤖 AI Engine — Choose Your Coach Ndubuisi Brain</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
+        <div class="ai-opt" id="ai-opt-gemini" onclick="selectAI('gemini')" style="padding:10px;border-radius:9px;border:1px solid var(--border);cursor:pointer;transition:all .2s;background:rgba(61,203,138,.08);border-color:rgba(61,203,138,.3)">
+          <div style="font-size:12px;font-weight:600;color:#3DCB8A;margin-bottom:3px">✦ Google Gemini</div>
+          <div style="font-size:10px;color:var(--text-muted);line-height:1.5">100% Free · 1,500 queries/day<br>Free key from aistudio.google.com</div>
+        </div>
+        <div class="ai-opt" id="ai-opt-claude" onclick="selectAI('claude')" style="padding:10px;border-radius:9px;border:1px solid var(--subtle);cursor:pointer;transition:all .2s">
+          <div style="font-size:12px;font-weight:600;color:var(--gold-light);margin-bottom:3px">◆ Anthropic Claude</div>
+          <div style="font-size:10px;color:var(--text-muted);line-height:1.5">Best quality · ~$0.003/query<br>Key from console.anthropic.com</div>
+        </div>
+      </div>
+      <!-- Gemini Key -->
+      <div id="gemini-key-sec">
+        <div class="m-lbl">Google Gemini API Key <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:10px;color:var(--green)">— FREE forever (1,500 queries/day)</span></div>
+        <input type="password" class="m-inp" id="gem-inp" placeholder="AIza..." />
+        <div class="m-hint">Get your free key at <a href="https://aistudio.google.com/apikey" target="_blank">aistudio.google.com/apikey</a> — sign in with Google, click "Create API Key". Takes 60 seconds. Completely free.</div>
+        <div class="m-status"><div class="st-dot off" id="gem-dot"></div><span id="gem-st" style="color:var(--text-muted)">Not connected</span></div>
+      </div>
+      <!-- Claude Key -->
+      <div id="claude-key-sec" style="display:none">
+        <div class="m-lbl">Anthropic Claude API Key</div>
+        <input type="password" class="m-inp" id="ant-inp" placeholder="sk-ant-api03-..." />
+        <div class="m-hint">Get your key at <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a> → API Keys. Add $5 credit to start (~1,500 analyses).</div>
+        <div class="m-status"><div class="st-dot off" id="ant-dot"></div><span id="ant-st" style="color:var(--text-muted)">Not connected</span></div>
+      </div>
+    </div>
+    <div class="free-box">
+      <div style="font-size:10px;font-weight:700;letter-spacing:.08em;color:var(--text-muted);text-transform:uppercase;margin-bottom:6px">Always Free — No Key Needed</div>
+      ✅ Live USD/NGN, USD/ZAR, USD/KES, USD/GHS rates<br>
+      ✅ TradingView real-time charts (NGX, JSE, NSE)<br>
+      ✅ Nairametrics, BusinessDay & Guardian NG news<br>
+      ✅ AI analysis (Gemini = free · Claude = ~$5/month)
+    </div>
+    <div class="m-sec">
+      <div class="m-lbl">Alpha Vantage API Key <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:10px;color:var(--text-muted)">— JSE, US stocks, FX, news sentiment</span></div>
+      <input type="password" class="m-inp" id="av-inp" placeholder="Enter Alpha Vantage key (free at alphavantage.co)" />
+      <div class="m-hint">Get a free key at <a href="https://www.alphavantage.co/support/#api-key" target="_blank">alphavantage.co</a> — 25 requests/day free tier.</div>
+      <div class="m-status"><div class="st-dot off" id="av-dot"></div><span id="av-st" style="color:var(--text-muted)">Not connected</span></div>
+    </div>
+    <div class="m-sec">
+      <div class="m-lbl">Financial Modeling Prep API Key <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:10px;color:var(--text-muted)">— NGX fundamentals, P/E, dividends</span></div>
+      <input type="password" class="m-inp" id="fmp-inp" placeholder="Enter FMP key (free at financialmodelingprep.com)" />
+      <div class="m-hint">Free tier at <a href="https://financialmodelingprep.com/developer/docs/" target="_blank">financialmodelingprep.com</a> — covers NGX, JSE, earnings data.</div>
+      <div class="m-status"><div class="st-dot off" id="fmp-dot"></div><span id="fmp-st" style="color:var(--text-muted)">Not connected</span></div>
+    </div>
+    <div class="m-acts">
+      <button class="m-cancel" onclick="closeSettings()">Cancel</button>
+      <button class="m-save" onclick="saveSettings()">Save Settings</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://s3.tradingview.com/tv.js"></script>
+<script>
+// STATE
+let ANTHROPIC_KEY = localStorage.getItem('nx_ant') || '';
+let GEMINI_KEY = localStorage.getItem('nx_gem') || '';
+let AI_ENGINE = localStorage.getItem('nx_engine') || 'gemini';
+let AV_KEY = localStorage.getItem('nx_av') || '';
+let FMP_KEY = localStorage.getItem('nx_fmp') || '';
+let selRisk = 'Conservative';
+let holdings = [];
+
+// DATA
+const NGX = [
+  {t:'DANGCEM',n:'Dangote Cement',p:'584.00',c:'+1.2%',pos:true,tv:'NGX:DANGCEM'},
+  {t:'MTNN',n:'MTN Nigeria',p:'227.50',c:'+0.8%',pos:true,tv:'NGX:MTNN'},
+  {t:'ZENITHBANK',n:'Zenith Bank',p:'44.80',c:'-0.4%',pos:false,tv:'NGX:ZENITHBANK'},
+  {t:'GTCO',n:'GT Holdings',p:'58.20',c:'+2.1%',pos:true,tv:'NGX:GTCO'},
+  {t:'AIRTELAFRI',n:'Airtel Africa',p:'2,380',c:'-1.1%',pos:false,tv:'NGX:AIRTELAFRI'},
+  {t:'BUAFOODS',n:'BUA Foods',p:'440.00',c:'+0.5%',pos:true,tv:'NGX:BUAFOODS'},
+  {t:'SEPLAT',n:'Seplat Energy',p:'5,150',c:'+3.4%',pos:true,tv:'NGX:SEPLAT'},
+  {t:'ACCESS',n:'Access Holdings',p:'22.95',c:'-0.2%',pos:false,tv:'NGX:ACCESS'},
+];
+const AFRICA = [
+  {t:'NPN',n:'Naspers (JSE)',p:'ZAR 3,420',c:'+1.5%',pos:true,tv:'JSE:NPN'},
+  {t:'SCOM',n:'Safaricom (NSE)',p:'KES 17.40',c:'+0.9%',pos:true,tv:'NSE:SCOM'},
+  {t:'EGH',n:'Ecobank Ghana',p:'GHS 12.80',c:'-0.6%',pos:false,tv:'GSE:EGH'},
+];
+const CHARTS_CFG = [
+  {s:'NGX:DANGCEM',t:'DANGCEM',n:'Dangote Cement'},
+  {s:'NGX:ZENITHBANK',t:'ZENITHBANK',n:'Zenith Bank'},
+  {s:'NGX:MTNN',t:'MTNN',n:'MTN Nigeria'},
+  {s:'NGX:GTCO',t:'GTCO',n:'GT Holdings'},
+  {s:'NGX:SEPLAT',t:'SEPLAT',n:'Seplat Energy'},
+  {s:'JSE:NPN',t:'NPN',n:'Naspers (JSE)'},
+];
+const QP = [
+  {l:'Zenith Bank analysis',i:'🏦'},{l:'Best NGX dividend stocks 2025',i:'💰'},
+  {l:'Dangote Cement buy or sell?',i:'🏗️'},{l:'NGX vs JSE — where to invest?',i:'⚖️'},
+  {l:'MTN Nigeria valuation',i:'📡'},{l:'Naira hedge strategy',i:'💱'},
+  {l:'Top 5 NGX growth stocks',i:'📈'},{l:'Seplat Energy oil outlook',i:'⛽'},
+];
+const MKTS = [
+  {f:'🇳🇬',e:'NGX',c:'Nigeria',i:'104,862',d:'150+ listed equities. Home of Dangote Cement, MTNN, Zenith Bank, GTCo.'},
+  {f:'🇿🇦',e:'JSE',c:'South Africa',i:'82,144',d:"Africa's largest exchange by market cap. Naspers, Anglo American, Standard Bank."},
+  {f:'🇬🇭',e:'GSE',c:'Ghana',i:'4,287',d:'Ecobank Ghana, MTN Ghana, GCB Bank. GHS-denominated trading.'},
+  {f:'🇰🇪',e:'NSE',c:'Kenya',i:'1,834',d:"Nairobi Securities Exchange — Safaricom dominates. East Africa's gateway."},
+  {f:'🇪🇬',e:'EGX',c:'Egypt',i:'33,920',d:"North Africa's powerhouse. Banks, real estate, telecoms, consumer goods."},
+  {f:'🇸🇳',e:'BRVM',c:'WAEMU Region',i:'286',d:'8 West African nations. Côte d\'Ivoire and Senegal anchor this XOF market.'},
+];
+const RSS = {
+  nairametrics:'https://nairametrics.com/feed/',
+  businessday:'https://businessday.ng/feed/',
+  guardian:'https://guardian.ng/category/business/feed/'
+};
+
+// INIT
+document.addEventListener('DOMContentLoaded',()=>{
+  loadKeys();renderSidebar();renderQP();renderMkts();renderChartsGrid();
+  fetchFX();setInterval(fetchFX,60000);
+  loadNews('nairametrics',document.querySelector('.src-btn'));
+  document.getElementById('stock-q').addEventListener('keypress',e=>{if(e.key==='Enter')analyzeStock()});
+});
+
+// KEYS & ENGINE
+function selectAI(engine){
+  AI_ENGINE=engine;
+  const gOpt=document.getElementById('ai-opt-gemini');
+  const cOpt=document.getElementById('ai-opt-claude');
+  const gSec=document.getElementById('gemini-key-sec');
+  const cSec=document.getElementById('claude-key-sec');
+  if(engine==='gemini'){
+    gOpt.style.background='rgba(61,203,138,.08)';gOpt.style.borderColor='rgba(61,203,138,.3)';
+    cOpt.style.background='';cOpt.style.borderColor='var(--subtle)';
+    gSec.style.display='block';cSec.style.display='none';
+  } else {
+    cOpt.style.background='rgba(201,168,76,.08)';cOpt.style.borderColor='var(--border)';
+    gOpt.style.background='';gOpt.style.borderColor='var(--subtle)';
+    gSec.style.display='none';cSec.style.display='block';
+  }
+}
+function loadKeys(){
+  selectAI(AI_ENGINE);
+  if(GEMINI_KEY){document.getElementById('gem-inp').value=GEMINI_KEY;setSt('gem',true)}
+  if(ANTHROPIC_KEY){document.getElementById('ant-inp').value=ANTHROPIC_KEY;setSt('ant',true)}
+  if(AV_KEY){document.getElementById('av-inp').value=AV_KEY;setSt('av',true)}
+  if(FMP_KEY){document.getElementById('fmp-inp').value=FMP_KEY;setSt('fmp',true)}
+  updateLiveBadge();updateEngineLabel();
+}
+function setSt(k,on){
+  const dot=document.getElementById(k+'-dot');
+  const el=document.getElementById(k+'-st');
+  if(!dot||!el)return;
+  dot.className='st-dot '+(on?'on':'off');
+  const labels={
+    gem:on?'Connected — Free AI ready (1,500/day)':'Not connected',
+    ant:on?'Connected — Claude AI ready':'Not connected',
+    av:on?'Connected':'Not connected',
+    fmp:on?'Connected':'Not connected',
+  };
+  el.textContent=labels[k]||( on?'Connected':'Not connected');
+  el.style.color=on?'var(--green)':'var(--text-muted)';
+}
+function updateLiveBadge(){
+  document.getElementById('live-badge').style.display=(GEMINI_KEY||ANTHROPIC_KEY||AV_KEY||FMP_KEY)?'flex':'none';
+}
+function updateEngineLabel(){
+  const el=document.getElementById('ai-engine-label');
+  if(!el)return;
+  if(AI_ENGINE==='gemini'&&GEMINI_KEY) el.textContent='Powered by Google Gemini (Free)';
+  else if(AI_ENGINE==='claude'&&ANTHROPIC_KEY) el.textContent='Powered by Anthropic Claude';
+  else el.textContent='NGX & African Markets';
+}
+function openSettings(){document.getElementById('settings-modal').classList.add('open')}
+function closeSettings(){document.getElementById('settings-modal').classList.remove('open')}
+function saveSettings(){
+  AI_ENGINE=AI_ENGINE;
+  GEMINI_KEY=document.getElementById('gem-inp').value.trim();
+  ANTHROPIC_KEY=document.getElementById('ant-inp').value.trim();
+  AV_KEY=document.getElementById('av-inp').value.trim();
+  FMP_KEY=document.getElementById('fmp-inp').value.trim();
+  localStorage.setItem('nx_engine',AI_ENGINE);
+  GEMINI_KEY?localStorage.setItem('nx_gem',GEMINI_KEY):localStorage.removeItem('nx_gem');
+  ANTHROPIC_KEY?localStorage.setItem('nx_ant',ANTHROPIC_KEY):localStorage.removeItem('nx_ant');
+  AV_KEY?localStorage.setItem('nx_av',AV_KEY):localStorage.removeItem('nx_av');
+  FMP_KEY?localStorage.setItem('nx_fmp',FMP_KEY):localStorage.removeItem('nx_fmp');
+  setSt('gem',!!GEMINI_KEY);setSt('ant',!!ANTHROPIC_KEY);setSt('av',!!AV_KEY);setSt('fmp',!!FMP_KEY);
+  updateLiveBadge();updateEngineLabel();closeSettings();
+}
+
+// FX
+async function fetchFX(){
+  try{
+    const r=await fetch('https://open.er-api.com/v6/latest/USD');
+    const d=await r.json();const rt=d.rates;
+    document.getElementById('fx-spin').style.display='none';
+    const pairs=[
+      {p:'USD/NGN',v:rt.NGN,dp:0},{p:'USD/ZAR',v:rt.ZAR,dp:2},
+      {p:'USD/KES',v:rt.KES,dp:2},{p:'USD/GHS',v:rt.GHS,dp:2},
+      {p:'EUR/NGN',v:rt.NGN/rt.EUR,dp:0},{p:'GBP/NGN',v:rt.NGN/rt.GBP,dp:0},
+    ];
+    document.getElementById('fx-rates').innerHTML=pairs.map((p,i)=>
+      `<div class="fx-item"><span class="fx-pair">${p.p}</span><span class="fx-rate">${p.v.toFixed(p.dp)}</span></div>${i<pairs.length-1?'<div class="fx-sep"></div>':''}`
+    ).join('');
+    document.getElementById('fx-ts').textContent='Updated '+new Date().toLocaleTimeString('en-NG',{hour:'2-digit',minute:'2-digit'});
+    // Sidebar FX
+    document.getElementById('fx-sidebar').innerHTML=`
+      ${wlItem('USD/NGN','Naira Rate','₦'+rt.NGN.toFixed(0),'Live','',false,true)}
+      ${wlItem('USD/ZAR','S.A. Rand','R'+rt.ZAR.toFixed(2),'Live','',false,true)}
+      ${wlItem('USD/KES','K. Shilling','KES '+rt.KES.toFixed(1),'Live','',false,true)}
+      ${wlItem('USD/GHS','Ghana Cedi','GHS '+rt.GHS.toFixed(2),'Live','',false,true)}`;
+  }catch(e){document.getElementById('fx-spin').textContent='FX unavailable'}
+}
+function wlItem(t,n,p,c,pos,clickable,noClick){
+  const onclick=noClick?'style="cursor:default"':`onclick="quickAnalyze('${t}: ${n} analysis')"`;
+  return `<div class="wl-item" ${onclick}>
+    <div><div class="wl-ticker">${t}</div><div class="wl-name">${n}</div></div>
+    <div class="wl-right"><div class="wl-val">${p}</div><div class="wl-chg" style="color:var(--text-muted)">${c}</div></div>
+  </div>`;
+}
+
+// SIDEBAR
+function renderSidebar(){
+  document.getElementById('ngx-list').innerHTML=NGX.map(s=>`
+    <div class="wl-item" onclick="quickAnalyze('${s.t}: Give me a comprehensive analysis of ${s.n} on the Nigerian Stock Exchange')">
+      <div><div class="wl-ticker">${s.t}</div><div class="wl-name">${s.n}</div></div>
+      <div class="wl-right"><div class="wl-val">₦${s.p}</div><div class="wl-chg ${s.pos?'p':'n'}">${s.c}</div></div>
+    </div>`).join('');
+  document.getElementById('africa-list').innerHTML=AFRICA.map(s=>`
+    <div class="wl-item" onclick="quickAnalyze('${s.t}: Analyse ${s.n} for me')">
+      <div><div class="wl-ticker">${s.t}</div><div class="wl-name">${s.n}</div></div>
+      <div class="wl-right"><div class="wl-val">${s.p}</div><div class="wl-chg ${s.pos?'p':'n'}">${s.c}</div></div>
+    </div>`).join('');
+}
+
+// QUICK PICKS
+function renderQP(){
+  document.getElementById('qp-grid').innerHTML=QP.map(q=>`<button class="qp-btn" onclick="quickAnalyze('${q.l}')">${q.i}<br>${q.l}</button>`).join('');
+}
+
+// MARKETS
+function renderMkts(){
+  document.getElementById('mkt-grid').innerHTML=MKTS.map(m=>`
+    <div class="mkt-card">
+      <div class="mkt-flag">${m.f}</div>
+      <div class="mkt-exc">${m.e}</div>
+      <div class="mkt-ctry">${m.c}</div>
+      <div class="mkt-idx">${m.i}</div>
+      <div class="mkt-dsc">${m.d}</div>
+      <button class="mkt-btn" onclick="quickAnalyze('Give me a comprehensive market outlook and top stock picks for the ${m.e} (${m.c})')">Ask Coach about ${m.e} ↗</button>
+    </div>`).join('');
+}
+
+// CHARTS GRID
+function renderChartsGrid(){
+  document.getElementById('charts-grid').innerHTML=CHARTS_CFG.map((c,i)=>`
+    <div class="mini-card">
+      <div class="mini-hdr">
+        <div><div class="mini-ticker">${c.t}</div><div class="mini-name">${c.n}</div></div>
+        <button class="mini-ask" onclick="quickAnalyze('${c.t}: Analyse ${c.n} for me')">Ask Coach ↗</button>
+      </div>
+      <div id="tv-m-${i}" style="height:210px;"></div>
+    </div>`).join('');
+  setTimeout(()=>{
+    if(typeof TradingView==='undefined')return;
+    CHARTS_CFG.forEach((c,i)=>new TradingView.widget({
+      width:'100%',height:210,symbol:c.s,interval:'D',timezone:'Africa/Lagos',
+      theme:'dark',style:'1',locale:'en',toolbar_bg:'#1A1D28',
+      enable_publishing:false,hide_top_toolbar:true,save_image:false,
+      container_id:'tv-m-'+i
+    }));
+  },400);
+}
+
+function updateChart(sym){
+  document.getElementById('chart-sym').textContent=sym;
+  document.getElementById('tv-main').innerHTML='';
+  if(typeof TradingView!=='undefined'){
+    new TradingView.widget({
+      width:'100%',height:360,symbol:sym,interval:'D',timezone:'Africa/Lagos',
+      theme:'dark',style:'1',locale:'en',toolbar_bg:'#1A1D28',
+      enable_publishing:false,container_id:'tv-main'
+    });
+  }
+}
+
+// NEWS
+async function loadNews(src,btn){
+  document.querySelectorAll('.src-btn').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  document.getElementById('news-list').innerHTML='<div class="news-empty">Fetching latest news...</div>';
+  const url=`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(RSS[src])}&count=15`;
+  try{
+    const r=await fetch(url);const d=await r.json();
+    if(!d.items||!d.items.length)throw new Error();
+    const names={nairametrics:'Nairametrics',businessday:'BusinessDay NG',guardian:'Guardian NG'};
+    document.getElementById('news-list').innerHTML=d.items.map(item=>{
+      const dt=new Date(item.pubDate).toLocaleDateString('en-NG',{day:'numeric',month:'short',year:'numeric'});
+      const desc=(item.description||'').replace(/<[^>]*>/g,'').slice(0,160);
+      const ttl=(item.title||'').replace(/&amp;/g,'&').replace(/&quot;/g,'"');
+      const safeTtl=ttl.replace(/'/g,"\\'");
+      return `<div class="news-card" onclick="window.open('${item.link}','_blank')">
+        <div class="news-src">${names[src]||src}</div>
+        <div class="news-ttl">${ttl}</div>
+        <div class="news-dsc">${desc}...</div>
+        <div class="news-foot">
+          <span class="news-dt">${dt}</span>
+          <button class="news-ask" onclick="event.stopPropagation();askNews('${safeTtl}')">Ask Coach ↗</button>
+        </div>
+      </div>`;
+    }).join('');
+  }catch(e){
+    document.getElementById('news-list').innerHTML=`<div class="news-empty">
+      <div style="font-size:20px;margin-bottom:7px">📡</div>
+      <div style="font-weight:500;color:var(--text-primary);margin-bottom:4px">News feed temporarily unavailable</div>
+      <div style="margin-bottom:10px">Visit <a href="https://nairametrics.com" target="_blank" style="color:var(--teal)">nairametrics.com</a> or <a href="https://businessday.ng" target="_blank" style="color:var(--teal)">businessday.ng</a> directly.</div>
+      <button onclick="loadNews('${src}',null)" style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:7px;padding:6px 14px;color:var(--text-secondary);cursor:pointer;font-family:'DM Sans',sans-serif;font-size:11px">↻ Retry</button>
+    </div>`;
+  }
+}
+function askNews(ttl){quickAnalyze(`This news headline just came out: "${ttl}" — What does this mean for Nigerian/African investors and which stocks could be affected?`)}
+
+// TAB NAV
+function showTab(name,btn){
+  document.querySelectorAll('.tab-view').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.nav-pill').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  btn.classList.add('active');
+}
+
+// STOCK PICKER
+function quickAnalyze(q){
+  document.getElementById('stock-q').value=q;
+  showTab('picker',document.querySelectorAll('.nav-pill')[0]);
+  analyzeStock();
+}
+
+// AI CALL — shared system prompt builder
+function buildSysPrompt(fxCtx,liveCtx){
+  return `You are Coach Ndubuisi Okonkwo, a legendary Nigerian investment coach with 30 years of battle-tested experience across the NGX, JSE, GSE, NSE, EGX, BRVM, Wall Street, and global markets. You started as a Lagos stockbroker in the 1990s, survived the 2008/09 NGX crash, and have coached hundreds of Nigerians to build billion-naira portfolios.
+
+Voice: sharp, authoritative, results-driven, profit-first. Back every position with numbers — P/E ratios, dividend yields, EPS growth, sector analysis. Ground advice in Nigerian financial reality: naira inflation, FX, CBN policy, real vs nominal returns.
+
+Benchmarks: NGX ASI ~15–20% historical annual return; Nigerian T-bills ~300–600bps below MPR; S&P 500 ~10% long-term; Nigerian inflation ~25–35% recent; CBN MPR ~27%.${fxCtx}${liveCtx}
+
+Format with clear labelled sections. Use ₦ for naira, $ for dollar. Be specific, data-driven, actionable. End with one coaching sign-off. ~400 words. Use line breaks for readability.`;
+}
+
+async function callAI(systemPrompt, userMessage){
+  if(AI_ENGINE==='gemini' && GEMINI_KEY){
+    const url=`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`;
+    const body={
+      system_instruction:{parts:[{text:systemPrompt}]},
+      contents:[{role:'user',parts:[{text:userMessage}]}],
+      generationConfig:{maxOutputTokens:1000,temperature:0.7}
+    };
+    const res=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+    const data=await res.json();
+    if(data.error)throw new Error(data.error.message);
+    return data.candidates?.[0]?.content?.parts?.[0]?.text || null;
+  } else if(AI_ENGINE==='claude' && ANTHROPIC_KEY){
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'x-api-key':ANTHROPIC_KEY,
+        'anthropic-version':'2023-06-01',
+        'anthropic-dangerous-direct-browser-access':'true'
+      },
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:systemPrompt,messages:[{role:'user',content:userMessage}]})
+    });
+    const data=await res.json();
+    if(data.error)throw new Error(data.error.message);
+    return data.content?.[0]?.text || null;
+  }
+  return null;
+}
+
+function getActiveKey(){
+  if(AI_ENGINE==='gemini') return GEMINI_KEY;
+  if(AI_ENGINE==='claude') return ANTHROPIC_KEY;
+  return null;
+}
+
+async function analyzeStock(){
+  const q=document.getElementById('stock-q').value.trim();if(!q)return;
+  const card=document.getElementById('res-card');
+  const dots=document.getElementById('dots');
+  const txt=document.getElementById('res-txt');
+  const btn=document.getElementById('go-btn');
+  card.classList.add('on');dots.style.display='flex';txt.textContent='';btn.disabled=true;
+
+  // Show chart for known tickers
+  const ticker=[...NGX,...AFRICA].find(s=>q.toUpperCase().includes(s.t));
+  if(ticker){
+    document.getElementById('chart-panel').style.display='block';
+    document.getElementById('chart-sel').value=ticker.tv;
+    updateChart(ticker.tv);
+  }
+
+  // No key set
+  if(!getActiveKey()){
+    dots.style.display='none';
+    const engineName=AI_ENGINE==='gemini'?'Google Gemini (free)':'Anthropic Claude';
+    txt.innerHTML=`<span style="color:var(--gold-light);font-weight:500">⚙️ API Key Required</span>\n\nTo use Coach Ndubuisi's AI analysis, add your ${engineName} key:\n\n1. Click the ⚙ gear icon (top right)\n2. ${AI_ENGINE==='gemini'?'Get a free key at <strong style="color:var(--teal)">aistudio.google.com/apikey</strong> (takes 60 seconds, completely free)':'Get a key at <strong style="color:var(--gold-light)">console.anthropic.com</strong> and add $5 credit'}\n3. Paste it in and click Save\n\n<span style="color:var(--text-muted);font-size:12px">You can switch between Gemini (free) and Claude in Settings at any time.</span>`;
+    btn.disabled=false;return;
+  }
+
+  const fxEl=document.querySelector('#fx-rates .fx-item .fx-rate');
+  const fxCtx=fxEl?`\nCurrent live USD/NGN rate: ${fxEl.textContent}`:'';
+  const liveCtx=(AV_KEY?'\nAlpha Vantage connected.':``)+(FMP_KEY?'\nFMP connected for NGX fundamentals.':'');
+
+  try{
+    const result=await callAI(buildSysPrompt(fxCtx,liveCtx),q);
+    dots.style.display='none';
+    if(result)await stream(txt,result);
+    else txt.innerHTML='<span class="err">No response received. Please try again.</span>';
+  }catch(e){
+    dots.style.display='none';
+    txt.innerHTML=`<span class="err">Error: ${e.message||'Connection failed. Check your API key and network.'}</span>`;
+  }
+  btn.disabled=false;
+}
+
+async function stream(el,text){
+  const cur=document.createElement('span');cur.className='cursor';el.appendChild(cur);
+  const chars=text.split('');let i=0;
+  return new Promise(r=>{
+    const iv=setInterval(()=>{
+      if(i>=chars.length){clearInterval(iv);cur.remove();r();return}
+      cur.insertAdjacentText('beforebegin',chars.slice(i,i+4).join(''));i+=4;
+    },10);
+  });
+}
+
+// PORTFOLIO
+function setRisk(el,r){document.querySelectorAll('.risk-opt').forEach(x=>x.classList.remove('active'));el.classList.add('active');selRisk=r;document.getElementById('s-risk').textContent=r}
+function addH(){holdings.push({id:Date.now()});renderH()}
+function removeH(id){holdings=holdings.filter(h=>h.id!==id);renderH()}
+function renderH(){
+  document.getElementById('h-list').innerHTML=holdings.map(h=>`
+    <div class="pf-row">
+      <input type="text" class="pf-inp" placeholder="e.g. ZENITHBANK" id="ht-${h.id}" oninput="updatePF()" />
+      <input type="number" class="pf-inp" placeholder="Units" id="hu-${h.id}" oninput="updatePF()" />
+      <input type="number" class="pf-inp" placeholder="₦ price" id="hp-${h.id}" oninput="updatePF()" />
+      <button class="pf-rm" onclick="removeH(${h.id})">×</button>
+    </div>`).join('');
+  document.getElementById('s-count').textContent=holdings.length;updatePF();
+}
+function updatePF(){
+  let t=0;
+  holdings.forEach(h=>{
+    const u=parseFloat(document.getElementById('hu-'+h.id)?.value)||0;
+    const p=parseFloat(document.getElementById('hp-'+h.id)?.value)||0;
+    t+=u*p;
+  });
+  document.getElementById('s-val').textContent='₦'+t.toLocaleString('en-NG',{maximumFractionDigits:0});
+  document.getElementById('s-count').textContent=holdings.length;
+}
+async function buildPF(){
+  if(!holdings.length){alert('Please add at least one holding first.');return}
+  const sum=holdings.map(h=>{
+    const t=document.getElementById('ht-'+h.id)?.value||'Unknown';
+    const u=document.getElementById('hu-'+h.id)?.value||'0';
+    const p=document.getElementById('hp-'+h.id)?.value||'0';
+    return `${t}: ${u} units @ ₦${p}`;
+  }).join('; ');
+  const goal=document.getElementById('pf-goal').value;
+  const q=`Analyse my portfolio:\nHoldings: ${sum}\nRisk: ${selRisk}\nGoal: ${goal||'Long-term wealth building'}\n\nProvide: 1) Diversification analysis, 2) Strengths & risks per holding, 3) Recommended additions or swaps, 4) Projected return range.`;
+  const card=document.getElementById('pf-res');const dots=document.getElementById('pf-dots');const txt=document.getElementById('pf-txt');const btn=document.getElementById('bld-btn');
+  card.classList.add('on');dots.style.display='flex';txt.textContent='';btn.disabled=true;
+
+  if(!getActiveKey()){
+    dots.style.display='none';
+    txt.innerHTML=`<span style="color:var(--gold-light);font-weight:500">⚙️ API Key Required</span>\n\nPlease add your AI key in Settings (⚙ top right) to enable portfolio analysis.`;
+    btn.disabled=false;return;
+  }
+
+  const pfSys=`You are Coach Ndubuisi Okonkwo, legendary Nigerian investment coach, 30 years NGX & global markets experience. Analyse this portfolio with sharp, data-driven, actionable advice. Be specific about NGX stocks, naira/dollar allocation, sector concentration, and realistic return expectations in both naira and dollar terms. Format with clear labelled sections. End with your signature coaching sign-off. ~450 words.`;
+  try{
+    const result=await callAI(pfSys,q);
+    dots.style.display='none';
+    if(result)await stream(txt,result);
+    else txt.innerHTML='<span class="err">No response received. Please try again.</span>';
+  }catch(e){
+    dots.style.display='none';
+    txt.innerHTML=`<span class="err">Error: ${e.message||'Connection failed.'}</span>`;
+  }
+  btn.disabled=false;
+}
+</script>
+</body>
+</html>
