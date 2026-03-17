@@ -317,7 +317,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg-deep);color:var(--text
               <option value="NGX:SEPLAT">SEPLAT</option>
               <option value="NGX:ACCESS">ACCESS</option>
               <option value="JSE:NPN">JSE: Naspers</option>
-              <option value="NSE:SCOM">NSE: Safaricom</option>
+              <option value="NSEKE:SCOM">NSE: Safaricom</option>
             </select>
           </div>
           <div id="tv-main" style="height:360px;"></div>
@@ -425,14 +425,18 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg-deep);color:var(--text
     <!-- AI ENGINE SELECTOR -->
     <div class="m-sec" style="background:rgba(201,168,76,0.06);border:1px solid var(--border);border-radius:10px;padding:12px">
       <div class="m-lbl" style="color:var(--gold-light);margin-bottom:10px">🤖 AI Engine — Choose Your Coach Ndubuisi Brain</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
-        <div class="ai-opt" id="ai-opt-gemini" onclick="selectAI('gemini')" style="padding:10px;border-radius:9px;border:1px solid var(--border);cursor:pointer;transition:all .2s;background:rgba(61,203,138,.08);border-color:rgba(61,203,138,.3)">
-          <div style="font-size:12px;font-weight:600;color:#3DCB8A;margin-bottom:3px">✦ Google Gemini</div>
-          <div style="font-size:10px;color:var(--text-muted);line-height:1.5">100% Free · 1,500 queries/day<br>Free key from aistudio.google.com</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-bottom:12px">
+        <div class="ai-opt" id="ai-opt-gemini" onclick="selectAI('gemini')" style="padding:9px;border-radius:9px;border:1px solid var(--border);cursor:pointer;transition:all .2s;background:rgba(61,203,138,.08);border-color:rgba(61,203,138,.3)">
+          <div style="font-size:11px;font-weight:600;color:#3DCB8A;margin-bottom:3px">✦ Gemini</div>
+          <div style="font-size:9px;color:var(--text-muted);line-height:1.5">100% Free<br>1,500/day</div>
         </div>
-        <div class="ai-opt" id="ai-opt-claude" onclick="selectAI('claude')" style="padding:10px;border-radius:9px;border:1px solid var(--subtle);cursor:pointer;transition:all .2s">
-          <div style="font-size:12px;font-weight:600;color:var(--gold-light);margin-bottom:3px">◆ Anthropic Claude</div>
-          <div style="font-size:10px;color:var(--text-muted);line-height:1.5">Best quality · ~$0.003/query<br>Key from console.anthropic.com</div>
+        <div class="ai-opt" id="ai-opt-deepseek" onclick="selectAI('deepseek')" style="padding:9px;border-radius:9px;border:1px solid var(--subtle);cursor:pointer;transition:all .2s">
+          <div style="font-size:11px;font-weight:600;color:#4A9EE8;margin-bottom:3px">◈ DeepSeek</div>
+          <div style="font-size:9px;color:var(--text-muted);line-height:1.5">~Free<br>$2 = 20k queries</div>
+        </div>
+        <div class="ai-opt" id="ai-opt-claude" onclick="selectAI('claude')" style="padding:9px;border-radius:9px;border:1px solid var(--subtle);cursor:pointer;transition:all .2s">
+          <div style="font-size:11px;font-weight:600;color:var(--gold-light);margin-bottom:3px">◆ Claude</div>
+          <div style="font-size:9px;color:var(--text-muted);line-height:1.5">Best quality<br>~$0.003/query</div>
         </div>
       </div>
       <!-- Gemini Key -->
@@ -441,6 +445,13 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg-deep);color:var(--text
         <input type="password" class="m-inp" id="gem-inp" placeholder="AIza..." />
         <div class="m-hint">Get your free key at <a href="https://aistudio.google.com/apikey" target="_blank">aistudio.google.com/apikey</a> — sign in with Google, click "Create API Key". Takes 60 seconds. Completely free.</div>
         <div class="m-status"><div class="st-dot off" id="gem-dot"></div><span id="gem-st" style="color:var(--text-muted)">Not connected</span></div>
+      </div>
+      <!-- DeepSeek Key -->
+      <div id="deepseek-key-sec" style="display:none">
+        <div class="m-lbl">DeepSeek API Key <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:10px;color:#4A9EE8">— $2 free credit on signup (~20,000 queries)</span></div>
+        <input type="password" class="m-inp" id="ds-inp" placeholder="sk-..." />
+        <div class="m-hint">Sign up at <a href="https://platform.deepseek.com" target="_blank">platform.deepseek.com</a> → API Keys → Create Key. You get $2 free credit on signup. Uses DeepSeek-V3 — powerful, fast, and virtually free.</div>
+        <div class="m-status"><div class="st-dot off" id="ds-dot"></div><span id="ds-st" style="color:var(--text-muted)">Not connected</span></div>
       </div>
       <!-- Claude Key -->
       <div id="claude-key-sec" style="display:none">
@@ -455,7 +466,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg-deep);color:var(--text
       ✅ Live USD/NGN, USD/ZAR, USD/KES, USD/GHS rates<br>
       ✅ TradingView real-time charts (NGX, JSE, NSE)<br>
       ✅ Nairametrics, BusinessDay & Guardian NG news<br>
-      ✅ AI analysis (Gemini = free · Claude = ~$5/month)
+      ✅ AI: Gemini = free · DeepSeek = ~free · Claude = ~$5/month
     </div>
     <div class="m-sec">
       <div class="m-lbl">Alpha Vantage API Key <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:10px;color:var(--text-muted)">— JSE, US stocks, FX, news sentiment</span></div>
@@ -481,6 +492,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg-deep);color:var(--text
 // STATE
 let ANTHROPIC_KEY = localStorage.getItem('nx_ant') || '';
 let GEMINI_KEY = localStorage.getItem('nx_gem') || '';
+let DEEPSEEK_KEY = localStorage.getItem('nx_ds') || '';
 let AI_ENGINE = localStorage.getItem('nx_engine') || 'gemini';
 let AV_KEY = localStorage.getItem('nx_av') || '';
 let FMP_KEY = localStorage.getItem('nx_fmp') || '';
@@ -503,7 +515,7 @@ const NGX = [
 // Pan-African: JSE and NSE Kenya work on Yahoo Finance
 const AFRICA = [
   {t:'NPN',n:'Naspers (JSE)',p:'—',c:'—',pos:true,tv:'JSE:NPN',yf:'NPN.JO'},
-  {t:'SCOM',n:'Safaricom (NSE)',p:'—',c:'—',pos:true,tv:'NSE:SCOM',yf:'SCOM.NR'},
+  {t:'SCOM',n:'Safaricom (NSE)',p:'—',c:'—',pos:true,tv:'NSEKE:SCOM',yf:'SCOM.NR'},
   {t:'EGH',n:'Ecobank Ghana',p:'—',c:'—',pos:false,tv:'GSE:EGH',yf:null},
 ];
 // US stocks: Yahoo Finance v8 API works directly from browsers, no proxy needed
@@ -560,22 +572,30 @@ document.addEventListener('DOMContentLoaded',()=>{
 function selectAI(engine){
   AI_ENGINE=engine;
   const gOpt=document.getElementById('ai-opt-gemini');
+  const dOpt=document.getElementById('ai-opt-deepseek');
   const cOpt=document.getElementById('ai-opt-claude');
   const gSec=document.getElementById('gemini-key-sec');
+  const dSec=document.getElementById('deepseek-key-sec');
   const cSec=document.getElementById('claude-key-sec');
+  // Reset all
+  [gOpt,dOpt,cOpt].forEach(o=>{if(o){o.style.background='';o.style.borderColor='var(--subtle)';}});
+  [gSec,dSec,cSec].forEach(s=>{if(s)s.style.display='none';});
+  // Activate selected
   if(engine==='gemini'){
     gOpt.style.background='rgba(61,203,138,.08)';gOpt.style.borderColor='rgba(61,203,138,.3)';
-    cOpt.style.background='';cOpt.style.borderColor='var(--subtle)';
-    gSec.style.display='block';cSec.style.display='none';
+    gSec.style.display='block';
+  } else if(engine==='deepseek'){
+    dOpt.style.background='rgba(74,158,232,.08)';dOpt.style.borderColor='rgba(74,158,232,.3)';
+    dSec.style.display='block';
   } else {
     cOpt.style.background='rgba(201,168,76,.08)';cOpt.style.borderColor='var(--border)';
-    gOpt.style.background='';gOpt.style.borderColor='var(--subtle)';
-    gSec.style.display='none';cSec.style.display='block';
+    cSec.style.display='block';
   }
 }
 function loadKeys(){
   selectAI(AI_ENGINE);
   if(GEMINI_KEY){document.getElementById('gem-inp').value=GEMINI_KEY;setSt('gem',true)}
+  if(DEEPSEEK_KEY){document.getElementById('ds-inp').value=DEEPSEEK_KEY;setSt('ds',true)}
   if(ANTHROPIC_KEY){document.getElementById('ant-inp').value=ANTHROPIC_KEY;setSt('ant',true)}
   if(AV_KEY){document.getElementById('av-inp').value=AV_KEY;setSt('av',true)}
   if(FMP_KEY){document.getElementById('fmp-inp').value=FMP_KEY;setSt('fmp',true)}
@@ -588,37 +608,41 @@ function setSt(k,on){
   dot.className='st-dot '+(on?'on':'off');
   const labels={
     gem:on?'Connected — Free AI ready (1,500/day)':'Not connected',
+    ds:on?'Connected — DeepSeek-V3 ready (~free)':'Not connected',
     ant:on?'Connected — Claude AI ready':'Not connected',
     av:on?'Connected':'Not connected',
     fmp:on?'Connected':'Not connected',
   };
-  el.textContent=labels[k]||( on?'Connected':'Not connected');
+  el.textContent=labels[k]||(on?'Connected':'Not connected');
   el.style.color=on?'var(--green)':'var(--text-muted)';
 }
 function updateLiveBadge(){
-  document.getElementById('live-badge').style.display=(GEMINI_KEY||ANTHROPIC_KEY||AV_KEY||FMP_KEY)?'flex':'none';
+  document.getElementById('live-badge').style.display=(GEMINI_KEY||DEEPSEEK_KEY||ANTHROPIC_KEY||AV_KEY||FMP_KEY)?'flex':'none';
 }
 function updateEngineLabel(){
   const el=document.getElementById('ai-engine-label');
   if(!el)return;
   if(AI_ENGINE==='gemini'&&GEMINI_KEY) el.textContent='Powered by Google Gemini (Free)';
+  else if(AI_ENGINE==='deepseek'&&DEEPSEEK_KEY) el.textContent='Powered by DeepSeek-V3 (~Free)';
   else if(AI_ENGINE==='claude'&&ANTHROPIC_KEY) el.textContent='Powered by Anthropic Claude';
   else el.textContent='NGX & African Markets';
 }
 function openSettings(){document.getElementById('settings-modal').classList.add('open')}
 function closeSettings(){document.getElementById('settings-modal').classList.remove('open')}
 function saveSettings(){
-  AI_ENGINE=AI_ENGINE;
   GEMINI_KEY=document.getElementById('gem-inp').value.trim();
+  DEEPSEEK_KEY=document.getElementById('ds-inp').value.trim();
   ANTHROPIC_KEY=document.getElementById('ant-inp').value.trim();
   AV_KEY=document.getElementById('av-inp').value.trim();
   FMP_KEY=document.getElementById('fmp-inp').value.trim();
   localStorage.setItem('nx_engine',AI_ENGINE);
   GEMINI_KEY?localStorage.setItem('nx_gem',GEMINI_KEY):localStorage.removeItem('nx_gem');
+  DEEPSEEK_KEY?localStorage.setItem('nx_ds',DEEPSEEK_KEY):localStorage.removeItem('nx_ds');
   ANTHROPIC_KEY?localStorage.setItem('nx_ant',ANTHROPIC_KEY):localStorage.removeItem('nx_ant');
   AV_KEY?localStorage.setItem('nx_av',AV_KEY):localStorage.removeItem('nx_av');
   FMP_KEY?localStorage.setItem('nx_fmp',FMP_KEY):localStorage.removeItem('nx_fmp');
-  setSt('gem',!!GEMINI_KEY);setSt('ant',!!ANTHROPIC_KEY);setSt('av',!!AV_KEY);setSt('fmp',!!FMP_KEY);
+  setSt('gem',!!GEMINI_KEY);setSt('ds',!!DEEPSEEK_KEY);setSt('ant',!!ANTHROPIC_KEY);
+  setSt('av',!!AV_KEY);setSt('fmp',!!FMP_KEY);
   updateLiveBadge();updateEngineLabel();closeSettings();
 }
  
@@ -880,8 +904,29 @@ async function callAI(systemPrompt, userMessage){
     };
     const res=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
     const data=await res.json();
-    if(data.error)throw new Error(data.error.message);
+    if(data.error)throw new Error(data.error.message+(res.status===429?' (quota exceeded 429)':''));
     return data.candidates?.[0]?.content?.parts?.[0]?.text || null;
+  } else if(AI_ENGINE==='deepseek' && DEEPSEEK_KEY){
+    // DeepSeek uses OpenAI-compatible API format
+    const res=await fetch('https://api.deepseek.com/chat/completions',{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'Authorization':`Bearer ${DEEPSEEK_KEY}`
+      },
+      body:JSON.stringify({
+        model:'deepseek-chat',
+        max_tokens:1000,
+        temperature:0.7,
+        messages:[
+          {role:'system',content:systemPrompt},
+          {role:'user',content:userMessage}
+        ]
+      })
+    });
+    const data=await res.json();
+    if(data.error)throw new Error(data.error.message);
+    return data.choices?.[0]?.message?.content || null;
   } else if(AI_ENGINE==='claude' && ANTHROPIC_KEY){
     const res=await fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',
@@ -902,8 +947,37 @@ async function callAI(systemPrompt, userMessage){
  
 function getActiveKey(){
   if(AI_ENGINE==='gemini') return GEMINI_KEY;
+  if(AI_ENGINE==='deepseek') return DEEPSEEK_KEY;
   if(AI_ENGINE==='claude') return ANTHROPIC_KEY;
   return null;
+}
+ 
+// Smart error message helper — detects quota/rate limit and gives actionable advice
+function friendlyError(e){
+  const msg=(e.message||'').toLowerCase();
+  const isQuota=msg.includes('quota') || msg.includes('rate') || msg.includes('limit') || msg.includes('exceeded') || msg.includes('429');
+  const isKey=msg.includes('api key') || msg.includes('invalid') || msg.includes('unauthorized') || msg.includes('403');
+  if(isQuota && AI_ENGINE==='gemini'){
+    return `<span style="color:var(--gold-light);font-weight:500">⏱️ Gemini Free Tier Limit Reached</span>
+ 
+The free Gemini tier allows 15 requests/minute and 1,500/day. You've hit that limit.
+ 
+<strong style="color:var(--text-primary)">Fix options (pick one):</strong>
+ 
+1. <strong>Wait ~10 seconds</strong> and try again — rate limits reset quickly
+2. <strong>Switch to DeepSeek</strong> — click ⚙ Settings → select ◈ DeepSeek → get a free key at <span style="color:#4A9EE8">platform.deepseek.com</span> ($2 credit = ~20,000 queries, never hits limits)
+3. <strong>Switch to Claude</strong> — click ⚙ Settings → select ◆ Claude → key from console.anthropic.com
+ 
+<span style="color:var(--dim);font-size:11px">DeepSeek is recommended as your backup — it's virtually free and has no daily limits.</span>`;
+  }
+  if(isKey){
+    return `<span style="color:var(--red);font-weight:500">🔑 Invalid API Key</span>
+ 
+Your ${AI_ENGINE} API key was rejected. Please check:\n• The key was copied fully with no extra spaces\n• The key is active in your dashboard\n• You selected the right engine in Settings
+ 
+Click ⚙ to re-enter your key.`;
+  }
+  return `<span class="err">Error: ${e.message||'Connection failed. Check your API key and network.'}</span>`;
 }
  
 async function analyzeStock(){
@@ -925,8 +999,13 @@ async function analyzeStock(){
   // No key set
   if(!getActiveKey()){
     dots.style.display='none';
-    const engineName=AI_ENGINE==='gemini'?'Google Gemini (free)':'Anthropic Claude';
-    txt.innerHTML=`<span style="color:var(--gold-light);font-weight:500">⚙️ API Key Required</span>\n\nTo use Coach Ndubuisi's AI analysis, add your ${engineName} key:\n\n1. Click the ⚙ gear icon (top right)\n2. ${AI_ENGINE==='gemini'?'Get a free key at <strong style="color:var(--teal)">aistudio.google.com/apikey</strong> (takes 60 seconds, completely free)':'Get a key at <strong style="color:var(--gold-light)">console.anthropic.com</strong> and add $5 credit'}\n3. Paste it in and click Save\n\n<span style="color:var(--text-muted);font-size:12px">You can switch between Gemini (free) and Claude in Settings at any time.</span>`;
+    const engineInfo={
+      gemini:{name:'Google Gemini (free)',hint:'Get a free key at <strong style="color:var(--teal)">aistudio.google.com/apikey</strong> — sign in with Google, click Create API Key. 100% free.'},
+      deepseek:{name:'DeepSeek (~free)',hint:'Sign up at <strong style="color:#4A9EE8">platform.deepseek.com</strong> → API Keys. You get $2 free credit (~20,000 queries).'},
+      claude:{name:'Anthropic Claude',hint:'Get a key at <strong style="color:var(--gold-light)">console.anthropic.com</strong> and add $5 credit (~1,500 analyses).'}
+    };
+    const info=engineInfo[AI_ENGINE]||engineInfo.gemini;
+    txt.innerHTML=`<span style="color:var(--gold-light);font-weight:500">⚙️ API Key Required</span>\n\nTo use Coach Ndubuisi's AI analysis, add your ${info.name} key:\n\n1. Click the ⚙ gear icon (top right)\n2. ${info.hint}\n3. Paste it in the key field and click Save\n\n<span style="color:var(--text-muted);font-size:12px">You can switch between Gemini (free), DeepSeek (~free), and Claude in Settings anytime.</span>`;
     btn.disabled=false;return;
   }
  
@@ -941,7 +1020,7 @@ async function analyzeStock(){
     else txt.innerHTML='<span class="err">No response received. Please try again.</span>';
   }catch(e){
     dots.style.display='none';
-    txt.innerHTML=`<span class="err">Error: ${e.message||'Connection failed. Check your API key and network.'}</span>`;
+    txt.innerHTML=friendlyError(e);
   }
   btn.disabled=false;
 }
@@ -1008,7 +1087,7 @@ async function buildPF(){
     else txt.innerHTML='<span class="err">No response received. Please try again.</span>';
   }catch(e){
     dots.style.display='none';
-    txt.innerHTML=`<span class="err">Error: ${e.message||'Connection failed.'}</span>`;
+    txt.innerHTML=friendlyError(e);
   }
   btn.disabled=false;
 }
@@ -1074,7 +1153,7 @@ const STOCK_DB = [
   {t:'ANG',n:'AngloGold Ashanti',e:'JSE',tv:'JSE:ANG'},
   {t:'IMP',n:'Impala Platinum Holdings',e:'JSE',tv:'JSE:IMP'},
   // NSE — Kenya
-  {t:'SCOM',n:'Safaricom Plc',e:'NSE',tv:'NSE:SCOM'},
+  {t:'SCOM',n:'Safaricom Plc',e:'NSE',tv:'NSEKE:SCOM'},
   {t:'EQTY',n:'Equity Group Holdings',e:'NSE',tv:'NSE:EQTY'},
   {t:'KCB',n:'KCB Group Plc',e:'NSE',tv:'NSE:KCB'},
   {t:'ABSA',n:'Absa Bank Kenya',e:'NSE',tv:'NSE:ABSA'},
