@@ -233,12 +233,17 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg-deep);color:var(--text
 <div class="layout">
   <aside class="sidebar">
     <div>
-      <div class="sb-title">🇳🇬 NGX Blue Chips<button class="sb-refresh" onclick="fetchFX()">↻</button></div>
+      <div class="sb-title">🇳🇬 NGX Blue Chips<button class="sb-refresh" onclick="fetchFX();fetchLivePrices()">↻</button></div>
+      <div style="font-size:9px;color:var(--dim);padding:0 2px 5px;line-height:1.4">Live prices via TradingView charts · Click any stock for AI analysis</div>
       <div id="ngx-list"></div>
     </div>
     <div>
       <div class="sb-title">🌍 Pan-African</div>
       <div id="africa-list"></div>
+    </div>
+    <div>
+      <div class="sb-title">🇺🇸 US Markets</div>
+      <div id="us-list"></div>
     </div>
     <div>
       <div class="sb-title">💱 FX Rates</div>
@@ -252,7 +257,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg-deep);color:var(--text
     <div class="tab-view active" id="tab-picker">
       <div class="picker-wrap">
         <div class="hero">
-          <h1>Coach Ndubuisi's Stock Picker</h1>
+          <h1>Nexfus Stock Picker</h1>
           <p>Expert AI analysis on any Nigerian or African stock — data-driven, profit-first intelligence.</p>
         </div>
         <div>
@@ -450,20 +455,50 @@ let selRisk = 'Conservative';
 let holdings = [];
 
 // DATA
+// NGX: No free public REST API exists. Prices shown via TradingView charts (live).
+// Sidebar shows last fetched price or "—". Click any stock to open live chart.
 const NGX = [
-  {t:'DANGCEM',n:'Dangote Cement',p:'584.00',c:'+1.2%',pos:true,tv:'NGX:DANGCEM'},
-  {t:'MTNN',n:'MTN Nigeria',p:'227.50',c:'+0.8%',pos:true,tv:'NGX:MTNN'},
-  {t:'ZENITHBANK',n:'Zenith Bank',p:'44.80',c:'-0.4%',pos:false,tv:'NGX:ZENITHBANK'},
-  {t:'GTCO',n:'GT Holdings',p:'58.20',c:'+2.1%',pos:true,tv:'NGX:GTCO'},
-  {t:'AIRTELAFRI',n:'Airtel Africa',p:'2,380',c:'-1.1%',pos:false,tv:'NGX:AIRTELAFRI'},
-  {t:'BUAFOODS',n:'BUA Foods',p:'440.00',c:'+0.5%',pos:true,tv:'NGX:BUAFOODS'},
-  {t:'SEPLAT',n:'Seplat Energy',p:'5,150',c:'+3.4%',pos:true,tv:'NGX:SEPLAT'},
-  {t:'ACCESS',n:'Access Holdings',p:'22.95',c:'-0.2%',pos:false,tv:'NGX:ACCESS'},
+  {t:'DANGCEM',n:'Dangote Cement',p:'—',c:'—',pos:true,tv:'NGX:DANGCEM',yf:'DANGCEM.LG'},
+  {t:'MTNN',n:'MTN Nigeria',p:'—',c:'—',pos:true,tv:'NGX:MTNN',yf:'MTNN.LG'},
+  {t:'ZENITHBANK',n:'Zenith Bank',p:'—',c:'—',pos:false,tv:'NGX:ZENITHBANK',yf:'ZENITHBANK.LG'},
+  {t:'GTCO',n:'GT Holdings',p:'—',c:'—',pos:true,tv:'NGX:GTCO',yf:'GTCO.LG'},
+  {t:'AIRTELAFRI',n:'Airtel Africa',p:'—',c:'—',pos:false,tv:'NGX:AIRTELAFRI',yf:'AIRTELAFRI.LG'},
+  {t:'BUAFOODS',n:'BUA Foods',p:'—',c:'—',pos:true,tv:'NGX:BUAFOODS',yf:'BUAFOODS.LG'},
+  {t:'SEPLAT',n:'Seplat Energy',p:'—',c:'—',pos:true,tv:'NGX:SEPLAT',yf:'SEPLAT.LG'},
+  {t:'ACCESS',n:'Access Holdings',p:'—',c:'—',pos:false,tv:'NGX:ACCESS',yf:'ACCESSCORP.LG'},
 ];
+// Pan-African: JSE and NSE Kenya work on Yahoo Finance
 const AFRICA = [
-  {t:'NPN',n:'Naspers (JSE)',p:'ZAR 3,420',c:'+1.5%',pos:true,tv:'JSE:NPN'},
-  {t:'SCOM',n:'Safaricom (NSE)',p:'KES 17.40',c:'+0.9%',pos:true,tv:'NSE:SCOM'},
-  {t:'EGH',n:'Ecobank Ghana',p:'GHS 12.80',c:'-0.6%',pos:false,tv:'GSE:EGH'},
+  {t:'NPN',n:'Naspers (JSE)',p:'—',c:'—',pos:true,tv:'JSE:NPN',yf:'NPN.JO'},
+  {t:'SCOM',n:'Safaricom (NSE)',p:'—',c:'—',pos:true,tv:'NSE:SCOM',yf:'SCOM.NR'},
+  {t:'EGH',n:'Ecobank Ghana',p:'—',c:'—',pos:false,tv:'GSE:EGH',yf:null},
+];
+// US stocks: Yahoo Finance v8 API works directly from browsers, no proxy needed
+const US_STOCKS = [
+  {t:'AAPL',n:'Apple Inc.',p:'—',c:'—',pos:true,tv:'NASDAQ:AAPL',yf:'AAPL'},
+  {t:'MSFT',n:'Microsoft',p:'—',c:'—',pos:true,tv:'NASDAQ:MSFT',yf:'MSFT'},
+  {t:'NVDA',n:'Nvidia',p:'—',c:'—',pos:true,tv:'NASDAQ:NVDA',yf:'NVDA'},
+  {t:'VOO',n:'S&P 500 ETF',p:'—',c:'—',pos:true,tv:'AMEX:VOO',yf:'VOO'},
+  {t:'XOM',n:'ExxonMobil',p:'—',c:'—',pos:true,tv:'NYSE:XOM',yf:'XOM'},
+];
+const CHARTS_CFG = [
+  {s:'NGX:DANGCEM',t:'DANGCEM',n:'Dangote Cement'},
+  {s:'NGX:ZENITHBANK',t:'ZENITHBANK',n:'Zenith Bank'},
+  {s:'NGX:MTNN',t:'MTNN',n:'MTN Nigeria'},
+  {s:'NGX:GTCO',t:'GTCO',n:'GT Holdings'},
+  {s:'NGX:SEPLAT',t:'SEPLAT',n:'Seplat Energy'},
+  {s:'JSE:NPN',t:'NPN',n:'Naspers (JSE)'},
+];
+const CY = new Date().getFullYear();
+const QP = [
+  {l:'Zenith Bank analysis',i:'🏦'},
+  {l:'Best NGX dividend stocks right now',i:'💰'},
+  {l:'Dangote Cement buy or sell?',i:'🏗️'},
+  {l:'NGX vs JSE — where to invest?',i:'⚖️'},
+  {l:'MTN Nigeria valuation',i:'📡'},
+  {l:'Naira hedge strategy with dollar assets',i:'💱'},
+  {l:'Top 5 NGX growth stocks to buy now',i:'📈'},
+  {l:'Seplat Energy oil & gas outlook',i:'⛽'},
 ];
 const CHARTS_CFG = [
   {s:'NGX:DANGCEM',t:'DANGCEM',n:'Dangote Cement'},
@@ -497,6 +532,7 @@ const RSS = {
 document.addEventListener('DOMContentLoaded',()=>{
   loadKeys();renderSidebar();renderQP();renderMkts();renderChartsGrid();
   fetchFX();setInterval(fetchFX,60000);
+  fetchLivePrices();setInterval(fetchLivePrices,300000);
   loadNews('nairametrics',document.querySelector('.src-btn'));
   document.getElementById('stock-q').addEventListener('keypress',e=>{if(e.key==='Enter')analyzeStock()});
 });
@@ -600,16 +636,106 @@ function wlItem(t,n,p,c,pos,clickable,noClick){
 
 // SIDEBAR
 function renderSidebar(){
+  // NGX — shows "—" until TradingView chart is opened or prices fetch partially
   document.getElementById('ngx-list').innerHTML=NGX.map(s=>`
     <div class="wl-item" onclick="quickAnalyze('${s.t}: Give me a comprehensive analysis of ${s.n} on the Nigerian Stock Exchange')">
       <div><div class="wl-ticker">${s.t}</div><div class="wl-name">${s.n}</div></div>
-      <div class="wl-right"><div class="wl-val">₦${s.p}</div><div class="wl-chg ${s.pos?'p':'n'}">${s.c}</div></div>
+      <div class="wl-right">
+        <div class="wl-val" id="p-${s.t}" style="font-size:11px">₦—</div>
+        <div class="wl-chg" id="c-${s.t}" style="color:var(--dim);font-size:10px">chart ↗</div>
+      </div>
     </div>`).join('');
+
+  // Pan-African — JSE/NSE prices fetched via Yahoo Finance
   document.getElementById('africa-list').innerHTML=AFRICA.map(s=>`
     <div class="wl-item" onclick="quickAnalyze('${s.t}: Analyse ${s.n} for me')">
       <div><div class="wl-ticker">${s.t}</div><div class="wl-name">${s.n}</div></div>
-      <div class="wl-right"><div class="wl-val">${s.p}</div><div class="wl-chg ${s.pos?'p':'n'}">${s.c}</div></div>
+      <div class="wl-right">
+        <div class="wl-val" id="p-${s.t}">—</div>
+        <div class="wl-chg" id="c-${s.t}" style="color:var(--text-muted)">—</div>
+      </div>
     </div>`).join('');
+
+  // US Stocks — Yahoo Finance direct (live)
+  document.getElementById('us-list').innerHTML=US_STOCKS.map(s=>`
+    <div class="wl-item" onclick="quickAnalyze('${s.t}: Analyse ${s.n} and what it means for Nigerian investors looking for US exposure')">
+      <div><div class="wl-ticker">${s.t}</div><div class="wl-name">${s.n}</div></div>
+      <div class="wl-right">
+        <div class="wl-val" id="p-${s.t}">$—</div>
+        <div class="wl-chg" id="c-${s.t}" style="color:var(--text-muted)">—</div>
+      </div>
+    </div>`).join('');
+}
+
+// LIVE PRICES
+// Strategy:
+//   NGX  → Yahoo Finance v8 chart API with .LG suffix (partial coverage, best effort)
+//   JSE  → Yahoo Finance v8 .JO suffix (reliable)
+//   NSE  → Yahoo Finance v8 .NR suffix (reliable)
+//   US   → Yahoo Finance v8 direct (fully reliable, no proxy needed)
+// Yahoo Finance v8 /chart/ endpoint supports CORS from browsers directly.
+async function fetchOnePriceYF(yf){
+  if(!yf) return null;
+  try{
+    const url=`https://query1.finance.yahoo.com/v8/finance/chart/${yf}?interval=1d&range=1d`;
+    const res=await fetch(url,{headers:{'User-Agent':'Mozilla/5.0'}});
+    const d=await res.json();
+    const meta=d?.chart?.result?.[0]?.meta;
+    if(!meta||!meta.regularMarketPrice) return null;
+    return {
+      price: meta.regularMarketPrice,
+      prevClose: meta.chartPreviousClose||meta.regularMarketPrice,
+      currency: meta.currency||'USD'
+    };
+  }catch(e){return null}
+}
+
+async function fetchLivePrices(){
+  const currencyPrefix={'NGN':'₦','ZAR':'R ','KES':'KES ','GHS':'GHS ','USD':'$','GBP':'£','EUR':'€'}
+
+  // Fetch all in parallel
+  const allFetches=[
+    ...NGX.map(s=>fetchOnePriceYF(s.yf).then(r=>({stock:s,r,group:'ngx'}))),
+    ...AFRICA.filter(s=>s.yf).map(s=>fetchOnePriceYF(s.yf).then(r=>({stock:s,r,group:'africa'}))),
+    ...US_STOCKS.map(s=>fetchOnePriceYF(s.yf).then(r=>({stock:s,r,group:'us'}))),
+  ];
+
+  const results=await Promise.allSettled(allFetches);
+  let updated=0;
+
+  results.forEach(res=>{
+    if(res.status!=='fulfilled'||!res.value) return;
+    const {stock,r,group}=res.value;
+    if(!r||!r.price) return;
+
+    const pre=currencyPrefix[r.currency]||'';
+    const chgPct=r.prevClose?((r.price-r.prevClose)/r.prevClose*100):0;
+    const isPos=chgPct>=0;
+    const priceStr=pre+r.price.toLocaleString('en',{minimumFractionDigits:2,maximumFractionDigits:2});
+    const chgStr=(isPos?'+':'')+chgPct.toFixed(2)+'%';
+
+    const pEl=document.getElementById('p-'+stock.t);
+    const cEl=document.getElementById('c-'+stock.t);
+    if(pEl){pEl.textContent=priceStr;pEl.style.fontSize='';}
+    if(cEl){cEl.textContent=chgStr;cEl.className='wl-chg '+(isPos?'p':'n');}
+    stock.p=r.price.toFixed(2);stock.c=chgStr;stock.pos=isPos;
+    updated++;
+  });
+
+  // Timestamp update
+  const ts=new Date().toLocaleTimeString('en-NG',{hour:'2-digit',minute:'2-digit'});
+  const fxTs=document.getElementById('fx-ts');
+  if(fxTs) fxTs.textContent=`FX & US prices updated ${ts}${updated>0?' · '+updated+' stocks live':''}`;
+
+  // For NGX stocks that returned no data, add a note pointing to TradingView chart
+  NGX.forEach(s=>{
+    const pEl=document.getElementById('p-'+s.t);
+    const cEl=document.getElementById('c-'+s.t);
+    if(pEl&&pEl.textContent==='₦—'){
+      pEl.title='NGX live price — click stock to open live chart';
+      if(cEl){cEl.textContent='live chart ↗';cEl.style.color='var(--dim)';}
+    }
+  });
 }
 
 // QUICK PICKS
