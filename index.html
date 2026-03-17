@@ -308,14 +308,14 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg-deep);color:var(--text
           <div class="chart-hdr">
             <div class="chart-sym" id="chart-sym">DANGCEM</div>
             <select class="chart-sel" id="chart-sel" onchange="updateChart(this.value)">
-              <option value="NGSE:DANGCEM">DANGCEM</option>
-              <option value="NGSE:ZENITHBANK">ZENITHBANK</option>
-              <option value="NGSE:MTNN">MTNN</option>
-              <option value="NGSE:GTCO">GTCO</option>
-              <option value="NGSE:AIRTELAFRI">AIRTELAFRI</option>
-              <option value="NGSE:BUAFOODS">BUAFOODS</option>
-              <option value="NGSE:SEPLAT">SEPLAT</option>
-              <option value="NGSE:ACCESS">ACCESS</option>
+              <option value="NGX:DANGCEM">DANGCEM</option>
+              <option value="NGX:ZENITHBANK">ZENITHBANK</option>
+              <option value="NGX:MTNN">MTNN</option>
+              <option value="NGX:GTCO">GTCO</option>
+              <option value="NGX:AIRTELAFRI">AIRTELAFRI</option>
+              <option value="NGX:BUAFOODS">BUAFOODS</option>
+              <option value="NGX:SEPLAT">SEPLAT</option>
+              <option value="NGX:ACCESS">ACCESS</option>
               <option value="JSE:NPN">JSE: Naspers</option>
               <option value="NSEKE:SCOM">NSE: Safaricom</option>
             </select>
@@ -503,14 +503,14 @@ let holdings = [];
 // NGX: No free public REST API exists. Prices shown via TradingView charts (live).
 // Sidebar shows last fetched price or "—". Click any stock to open live chart.
 const NGX = [
-  {t:'DANGCEM',n:'Dangote Cement',p:'—',c:'—',pos:true,tv:'NGSE:DANGCEM',yf:'DANGCEM.LG'},
-  {t:'MTNN',n:'MTN Nigeria',p:'—',c:'—',pos:true,tv:'NGSE:MTNN',yf:'MTNN.LG'},
-  {t:'ZENITHBANK',n:'Zenith Bank',p:'—',c:'—',pos:false,tv:'NGSE:ZENITHBANK',yf:'ZENITHBANK.LG'},
-  {t:'GTCO',n:'GT Holdings',p:'—',c:'—',pos:true,tv:'NGSE:GTCO',yf:'GTCO.LG'},
-  {t:'AIRTELAFRI',n:'Airtel Africa',p:'—',c:'—',pos:false,tv:'NGSE:AIRTELAFRI',yf:'AIRTELAFRI.LG'},
-  {t:'BUAFOODS',n:'BUA Foods',p:'—',c:'—',pos:true,tv:'NGSE:BUAFOODS',yf:'BUAFOODS.LG'},
-  {t:'SEPLAT',n:'Seplat Energy',p:'—',c:'—',pos:true,tv:'NGSE:SEPLAT',yf:'SEPLAT.LG'},
-  {t:'ACCESS',n:'Access Holdings',p:'—',c:'—',pos:false,tv:'NGSE:ACCESS',yf:'ACCESSCORP.LG'},
+  {t:'DANGCEM',n:'Dangote Cement',p:'—',c:'—',pos:true,tv:'NGX:DANGCEM',yf:'DANGCEM.LG'},
+  {t:'MTNN',n:'MTN Nigeria',p:'—',c:'—',pos:true,tv:'NGX:MTNN',yf:'MTNN.LG'},
+  {t:'ZENITHBANK',n:'Zenith Bank',p:'—',c:'—',pos:false,tv:'NGX:ZENITHBANK',yf:'ZENITHBANK.LG'},
+  {t:'GTCO',n:'GT Holdings',p:'—',c:'—',pos:true,tv:'NGX:GTCO',yf:'GTCO.LG'},
+  {t:'AIRTELAFRI',n:'Airtel Africa',p:'—',c:'—',pos:false,tv:'NGX:AIRTELAFRI',yf:'AIRTELAFRI.LG'},
+  {t:'BUAFOODS',n:'BUA Foods',p:'—',c:'—',pos:true,tv:'NGX:BUAFOODS',yf:'BUAFOODS.LG'},
+  {t:'SEPLAT',n:'Seplat Energy',p:'—',c:'—',pos:true,tv:'NGX:SEPLAT',yf:'SEPLAT.LG'},
+  {t:'ACCESS',n:'Access Holdings',p:'—',c:'—',pos:false,tv:'NGX:ACCESS',yf:'ACCESSCORP.LG'},
 ];
 // Pan-African: JSE and NSE Kenya work on Yahoo Finance
 const AFRICA = [
@@ -527,11 +527,11 @@ const US_STOCKS = [
   {t:'XOM',n:'ExxonMobil',p:'—',c:'—',pos:true,tv:'NYSE:XOM',yf:'XOM'},
 ];
 const CHARTS_CFG = [
-  {s:'NGSE:DANGCEM',t:'DANGCEM',n:'Dangote Cement'},
-  {s:'NGSE:ZENITHBANK',t:'ZENITHBANK',n:'Zenith Bank'},
-  {s:'NGSE:MTNN',t:'MTNN',n:'MTN Nigeria'},
-  {s:'NGSE:GTCO',t:'GTCO',n:'GT Holdings'},
-  {s:'NGSE:SEPLAT',t:'SEPLAT',n:'Seplat Energy'},
+  {s:'NGX:DANGCEM',t:'DANGCEM',n:'Dangote Cement'},
+  {s:'NGX:ZENITHBANK',t:'ZENITHBANK',n:'Zenith Bank'},
+  {s:'NGX:MTNN',t:'MTNN',n:'MTN Nigeria'},
+  {s:'NGX:GTCO',t:'GTCO',n:'GT Holdings'},
+  {s:'NGX:SEPLAT',t:'SEPLAT',n:'Seplat Energy'},
   {s:'JSE:NPN',t:'NPN',n:'Naspers (JSE)'},
 ];
 const CY = new Date().getFullYear();
@@ -821,7 +821,7 @@ function renderChartsGrid(){
 }
  
 function updateChart(sym){
-  // Show only ticker part (e.g. "DANGCEM" not "NGSE:DANGCEM")
+  // Show only ticker part (e.g. "DANGCEM" not "NGX:DANGCEM")
   const label = sym.includes(':') ? sym.split(':')[1] : sym;
   document.getElementById('chart-sym').textContent=label;
   document.getElementById('tv-main').innerHTML='';
@@ -1097,45 +1097,45 @@ async function buildPF(){
 // ===================== STOCK DATABASE & SEARCH =====================
 const STOCK_DB = [
   // NGX — Nigeria
-  {t:'DANGCEM',n:'Dangote Cement Plc',e:'NGX',tv:'NGSE:DANGCEM'},
-  {t:'MTNN',n:'MTN Nigeria Communications',e:'NGX',tv:'NGSE:MTNN'},
-  {t:'ZENITHBANK',n:'Zenith Bank Plc',e:'NGX',tv:'NGSE:ZENITHBANK'},
-  {t:'GTCO',n:'Guaranty Trust Holding Co.',e:'NGX',tv:'NGSE:GTCO'},
-  {t:'AIRTELAFRI',n:'Airtel Africa Plc',e:'NGX',tv:'NGSE:AIRTELAFRI'},
-  {t:'BUAFOODS',n:'BUA Foods Plc',e:'NGX',tv:'NGSE:BUAFOODS'},
-  {t:'BUACEMENT',n:'BUA Cement Plc',e:'NGX',tv:'NGSE:BUACEMENT'},
-  {t:'SEPLAT',n:'Seplat Energy Plc',e:'NGX',tv:'NGSE:SEPLAT'},
-  {t:'ACCESSCORP',n:'Access Holdings Plc',e:'NGX',tv:'NGSE:ACCESS'},
-  {t:'FBNH',n:'FBN Holdings Plc',e:'NGX',tv:'NGSE:FBNH'},
-  {t:'UBA',n:'United Bank for Africa',e:'NGX',tv:'NGSE:UBA'},
-  {t:'STANBIC',n:'Stanbic IBTC Holdings',e:'NGX',tv:'NGSE:STANBIC'},
-  {t:'NESTLE',n:'Nestle Nigeria Plc',e:'NGX',tv:'NGSE:NESTLE'},
-  {t:'UNILEVER',n:'Unilever Nigeria Plc',e:'NGX',tv:'NGSE:UNILEVER'},
-  {t:'FLOURMILL',n:'Flour Mills of Nigeria',e:'NGX',tv:'NGSE:FLOURMILL'},
-  {t:'NASCON',n:'NASCON Allied Industries',e:'NGX',tv:'NGSE:NASCON'},
-  {t:'TRANSCORP',n:'Transnational Corporation',e:'NGX',tv:'NGSE:TRANSCORP'},
-  {t:'TRANSCOHOT',n:'Transcorp Hotels Plc',e:'NGX',tv:'NGSE:TRANSCOHOT'},
-  {t:'PRESCO',n:'Presco Plc',e:'NGX',tv:'NGSE:PRESCO'},
-  {t:'OKOMUOIL',n:'Okomu Oil Palm',e:'NGX',tv:'NGSE:OKOMUOIL'},
-  {t:'WAPCO',n:'Lafarge Africa Plc',e:'NGX',tv:'NGSE:WAPCO'},
-  {t:'TOTAL',n:'TotalEnergies Marketing Nig.',e:'NGX',tv:'NGSE:TOTAL'},
-  {t:'CONOIL',n:'Conoil Plc',e:'NGX',tv:'NGSE:CONOIL'},
-  {t:'ARDOVA',n:'Ardova Plc',e:'NGX',tv:'NGSE:ARDOVA'},
-  {t:'FIDELITYBK',n:'Fidelity Bank Plc',e:'NGX',tv:'NGSE:FIDELITYBK'},
-  {t:'STERLING',n:'Sterling Financial Holdings',e:'NGX',tv:'NGSE:STERLING'},
-  {t:'WEMABANK',n:'Wema Bank Plc',e:'NGX',tv:'NGSE:WEMABANK'},
-  {t:'UNIONBANK',n:'Union Bank of Nigeria',e:'NGX',tv:'NGSE:UNIONBANK'},
-  {t:'NB',n:'Nigerian Breweries Plc',e:'NGX',tv:'NGSE:NB'},
-  {t:'CHAMPION',n:'Champion Breweries Plc',e:'NGX',tv:'NGSE:CHAMPION'},
-  {t:'INTBREW',n:'International Breweries',e:'NGX',tv:'NGSE:INTBREW'},
-  {t:'CADBURY',n:'Cadbury Nigeria Plc',e:'NGX',tv:'NGSE:CADBURY'},
-  {t:'MANSARD',n:'AXA Mansard Insurance',e:'NGX',tv:'NGSE:MANSARD'},
-  {t:'CUSTODYINS',n:'Custodian Investment Plc',e:'NGX',tv:'NGSE:CUSTODYINS'},
-  {t:'UPDC',n:'UPDC Plc',e:'NGX',tv:'NGSE:UPDC'},
-  {t:'JAPAULGOLD',n:'Japaul Gold & Ventures',e:'NGX',tv:'NGSE:JAPAULGOLD'},
-  {t:'CHAMS',n:'Chams Holding Company',e:'NGX',tv:'NGSE:CHAMS'},
-  {t:'LIVESTOCK',n:'Livestock Feeds Plc',e:'NGX',tv:'NGSE:LIVESTOCK'},
-  {t:'ETRANZACT',n:'eTranzact International',e:'NGX',tv:'NGSE:ETRANZACT'},
+  {t:'DANGCEM',n:'Dangote Cement Plc',e:'NGX',tv:'NGX:DANGCEM'},
+  {t:'MTNN',n:'MTN Nigeria Communications',e:'NGX',tv:'NGX:MTNN'},
+  {t:'ZENITHBANK',n:'Zenith Bank Plc',e:'NGX',tv:'NGX:ZENITHBANK'},
+  {t:'GTCO',n:'Guaranty Trust Holding Co.',e:'NGX',tv:'NGX:GTCO'},
+  {t:'AIRTELAFRI',n:'Airtel Africa Plc',e:'NGX',tv:'NGX:AIRTELAFRI'},
+  {t:'BUAFOODS',n:'BUA Foods Plc',e:'NGX',tv:'NGX:BUAFOODS'},
+  {t:'BUACEMENT',n:'BUA Cement Plc',e:'NGX',tv:'NGX:BUACEMENT'},
+  {t:'SEPLAT',n:'Seplat Energy Plc',e:'NGX',tv:'NGX:SEPLAT'},
+  {t:'ACCESSCORP',n:'Access Holdings Plc',e:'NGX',tv:'NGX:ACCESS'},
+  {t:'FBNH',n:'FBN Holdings Plc',e:'NGX',tv:'NGX:FBNH'},
+  {t:'UBA',n:'United Bank for Africa',e:'NGX',tv:'NGX:UBA'},
+  {t:'STANBIC',n:'Stanbic IBTC Holdings',e:'NGX',tv:'NGX:STANBIC'},
+  {t:'NESTLE',n:'Nestle Nigeria Plc',e:'NGX',tv:'NGX:NESTLE'},
+  {t:'UNILEVER',n:'Unilever Nigeria Plc',e:'NGX',tv:'NGX:UNILEVER'},
+  {t:'FLOURMILL',n:'Flour Mills of Nigeria',e:'NGX',tv:'NGX:FLOURMILL'},
+  {t:'NASCON',n:'NASCON Allied Industries',e:'NGX',tv:'NGX:NASCON'},
+  {t:'TRANSCORP',n:'Transnational Corporation',e:'NGX',tv:'NGX:TRANSCORP'},
+  {t:'TRANSCOHOT',n:'Transcorp Hotels Plc',e:'NGX',tv:'NGX:TRANSCOHOT'},
+  {t:'PRESCO',n:'Presco Plc',e:'NGX',tv:'NGX:PRESCO'},
+  {t:'OKOMUOIL',n:'Okomu Oil Palm',e:'NGX',tv:'NGX:OKOMUOIL'},
+  {t:'WAPCO',n:'Lafarge Africa Plc',e:'NGX',tv:'NGX:WAPCO'},
+  {t:'TOTAL',n:'TotalEnergies Marketing Nig.',e:'NGX',tv:'NGX:TOTAL'},
+  {t:'CONOIL',n:'Conoil Plc',e:'NGX',tv:'NGX:CONOIL'},
+  {t:'ARDOVA',n:'Ardova Plc',e:'NGX',tv:'NGX:ARDOVA'},
+  {t:'FIDELITYBK',n:'Fidelity Bank Plc',e:'NGX',tv:'NGX:FIDELITYBK'},
+  {t:'STERLING',n:'Sterling Financial Holdings',e:'NGX',tv:'NGX:STERLING'},
+  {t:'WEMABANK',n:'Wema Bank Plc',e:'NGX',tv:'NGX:WEMABANK'},
+  {t:'UNIONBANK',n:'Union Bank of Nigeria',e:'NGX',tv:'NGX:UNIONBANK'},
+  {t:'NB',n:'Nigerian Breweries Plc',e:'NGX',tv:'NGX:NB'},
+  {t:'CHAMPION',n:'Champion Breweries Plc',e:'NGX',tv:'NGX:CHAMPION'},
+  {t:'INTBREW',n:'International Breweries',e:'NGX',tv:'NGX:INTBREW'},
+  {t:'CADBURY',n:'Cadbury Nigeria Plc',e:'NGX',tv:'NGX:CADBURY'},
+  {t:'MANSARD',n:'AXA Mansard Insurance',e:'NGX',tv:'NGX:MANSARD'},
+  {t:'CUSTODYINS',n:'Custodian Investment Plc',e:'NGX',tv:'NGX:CUSTODYINS'},
+  {t:'UPDC',n:'UPDC Plc',e:'NGX',tv:'NGX:UPDC'},
+  {t:'JAPAULGOLD',n:'Japaul Gold & Ventures',e:'NGX',tv:'NGX:JAPAULGOLD'},
+  {t:'CHAMS',n:'Chams Holding Company',e:'NGX',tv:'NGX:CHAMS'},
+  {t:'LIVESTOCK',n:'Livestock Feeds Plc',e:'NGX',tv:'NGX:LIVESTOCK'},
+  {t:'ETRANZACT',n:'eTranzact International',e:'NGX',tv:'NGX:ETRANZACT'},
   // JSE — South Africa
   {t:'NPN',n:'Naspers Ltd',e:'JSE',tv:'JSE:NPN'},
   {t:'PRX',n:'Prosus NV',e:'JSE',tv:'JSE:PRX'},
