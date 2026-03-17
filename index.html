@@ -15,7 +15,7 @@
   --green:#3DCB8A;--red:#F05C5C;--teal:#1EB8A0;
 }
 body{font-family:'DM Sans',sans-serif;background:var(--bg-deep);color:var(--text-primary);min-height:100vh;overflow-x:hidden}
- 
+
 /* HEADER */
 .header{background:var(--bg-panel);border-bottom:1px solid var(--border);padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between;height:58px;position:sticky;top:0;z-index:100}
 .logo{display:flex;align-items:center;gap:9px}
@@ -32,7 +32,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg-deep);color:var(--text
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 .gear-btn{width:31px;height:31px;background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:7px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;transition:all .2s;color:var(--text-secondary)}
 .gear-btn:hover{border-color:var(--border);color:var(--gold-light)}
- 
+
 /* FX BAR */
 .fx-bar{background:var(--bg-panel);border-bottom:1px solid var(--border-subtle);padding:5px 1.5rem;display:flex;align-items:center;gap:18px;overflow-x:auto;min-height:32px}
 .fx-bar::-webkit-scrollbar{display:none}
@@ -43,10 +43,10 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg-deep);color:var(--text
 .fx-sep{width:1px;height:12px;background:var(--border-subtle);flex-shrink:0}
 .fx-ts{font-size:10px;color:var(--text-muted);margin-left:auto;white-space:nowrap}
 .fx-spin{font-size:10px;color:var(--text-muted);font-style:italic}
- 
+
 /* LAYOUT */
 .layout{display:grid;grid-template-columns:270px 1fr;min-height:calc(100vh - 90px)}
- 
+
 /* SIDEBAR */
 .sidebar{background:var(--bg-panel);border-right:1px solid var(--border-subtle);overflow-y:auto;padding:.9rem;display:flex;flex-direction:column;gap:1.1rem}
 .sb-title{font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted);margin-bottom:5px;display:flex;align-items:center;justify-content:space-between}
@@ -60,7 +60,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg-deep);color:var(--text
 .wl-val{font-family:'DM Mono',monospace;font-size:11px;font-weight:500;color:var(--text-primary);margin-bottom:1px}
 .wl-chg{font-family:'DM Mono',monospace;font-size:10px;font-weight:500}
 .wl-chg.p{color:var(--green)}.wl-chg.n{color:var(--red)}
- 
+
 /* STOCK SEARCH */
 .sb-search-wrap{position:relative;margin-bottom:.3rem}
 .sb-search-row{display:flex;gap:5px}
@@ -84,12 +84,12 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg-deep);color:var(--text
 .sr-exch.gse{background:rgba(240,92,92,.1);color:var(--red)}
 .sr-empty{padding:14px 12px;font-size:12px;color:var(--dim);text-align:center}
 .sr-count{padding:6px 12px;font-size:10px;color:var(--dim);border-bottom:1px solid var(--border-subtle);background:var(--bg-elevated)}
- 
+
 /* MAIN */
 .main{display:flex;flex-direction:column;overflow:hidden}
 .tab-view{display:none;flex-direction:column;height:100%}
 .tab-view.active{display:flex}
- 
+
 /* PICKER */
 .picker-wrap{flex:1;display:flex;flex-direction:column;padding:1.5rem;gap:1.1rem;overflow-y:auto}
 .hero{text-align:center;padding:.8rem 0 .3rem}
@@ -106,14 +106,14 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg-deep);color:var(--text
 .go-btn{padding:12px 22px;background:linear-gradient(135deg,var(--gold),var(--gold-dim));border:none;border-radius:10px;color:#0D0F14;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;white-space:nowrap}
 .go-btn:hover{filter:brightness(1.1);transform:translateY(-1px)}
 .go-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
- 
+
 /* CHART PANEL */
 .chart-panel{background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:13px;overflow:hidden;display:none}
 .chart-hdr{padding:9px 14px;background:var(--bg-elevated);border-bottom:1px solid var(--border-subtle);display:flex;align-items:center;justify-content:space-between}
 .chart-sym{font-family:'DM Mono',monospace;font-size:12px;color:var(--gold-light);font-weight:500}
 .chart-sel{background:var(--bg-card);border:1px solid var(--border);border-radius:6px;color:var(--text-primary);font-family:'DM Sans',sans-serif;font-size:11px;padding:3px 7px;outline:none;cursor:pointer}
 .chart-sel option{background:var(--bg-panel)}
- 
+
 /* RESPONSE */
 .res-card{background:var(--bg-card);border:1px solid var(--border);border-radius:13px;overflow:hidden;display:none}
 .res-card.on{display:block}
@@ -131,7 +131,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg-deep);color:var(--text
 .cursor{display:inline-block;width:2px;height:12px;background:var(--gold);margin-left:2px;vertical-align:middle;animation:blink .7s infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
 .err{color:var(--red);font-size:12px}
- 
+
 /* CHARTS TAB */
 .charts-wrap{padding:1.5rem;overflow-y:auto;display:flex;flex-direction:column;gap:1.2rem}
 .charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
@@ -141,7 +141,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg-deep);color:var(--text
 .mini-name{font-size:10px;color:var(--text-secondary)}
 .mini-ask{font-size:10px;color:var(--text-muted);background:none;border:1px solid var(--border-subtle);border-radius:5px;padding:2px 7px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s}
 .mini-ask:hover{color:var(--gold-light);border-color:var(--border)}
- 
+
 /* NEWS TAB */
 .news-wrap{padding:1.5rem;overflow-y:auto;display:flex;flex-direction:column;gap:.9rem}
 .news-top{display:flex;align-items:center;justify-content:space-between}
@@ -159,7 +159,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg-deep);color:var(--text
 .news-ask{font-size:10px;color:var(--teal);background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif}
 .news-ask:hover{opacity:.7}
 .news-empty{text-align:center;padding:2.5rem;color:var(--text-muted);font-size:13px;background:var(--bg-card);border-radius:11px;border:1px solid var(--border-subtle)}
- 
+
 /* MARKETS */
 .mkt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:.9rem;padding:1.5rem}
 .mkt-card{background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:12px;padding:1.1rem;transition:border-color .2s}
@@ -171,7 +171,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg-deep);color:var(--text
 .mkt-dsc{font-size:11px;color:var(--text-secondary);line-height:1.5}
 .mkt-btn{margin-top:9px;width:100%;padding:6px;background:transparent;border:1px solid var(--border);border-radius:7px;color:var(--gold);font-family:'DM Sans',sans-serif;font-size:11px;font-weight:500;cursor:pointer;transition:all .2s}
 .mkt-btn:hover{background:var(--bg-elevated)}
- 
+
 /* PORTFOLIO */
 .pf-wrap{padding:1.5rem;display:flex;flex-direction:column;gap:1.1rem;overflow-y:auto}
 .sec-card{background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:12px;padding:1.2rem}
@@ -194,7 +194,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg-deep);color:var(--text
 .build-btn{background:linear-gradient(135deg,var(--gold),var(--gold-dim));border:none;border-radius:9px;padding:10px 20px;color:#0D0F14;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s}
 .build-btn:hover{filter:brightness(1.1)}
 .build-btn:disabled{opacity:.5;cursor:not-allowed}
- 
+
 /* SETTINGS MODAL */
 .overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:999;display:none;align-items:center;justify-content:center}
 .overlay.open{display:flex}
@@ -216,14 +216,14 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg-deep);color:var(--text
 .m-cancel{padding:8px 16px;background:transparent;border:1px solid var(--border-subtle);border-radius:8px;color:var(--text-secondary);font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;transition:all .2s}
 .m-cancel:hover{border-color:var(--border);color:var(--text-primary)}
 .m-save{padding:8px 16px;background:linear-gradient(135deg,var(--gold),var(--gold-dim));border:none;border-radius:8px;color:#0D0F14;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer}
- 
+
 ::-webkit-scrollbar{width:3px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
 </style>
 </head>
 <body>
- 
+
 <header class="header">
   <div class="logo">
     <div class="logo-icon">N</div>
@@ -245,7 +245,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg-deep);color:var(--text
     <div class="gear-btn" onclick="openSettings()" title="Settings & API Keys">⚙</div>
   </div>
 </header>
- 
+
 <!-- FX TICKER -->
 <div class="fx-bar" id="fx-bar">
   <div class="fx-lbl">LIVE FX</div>
@@ -253,7 +253,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg-deep);color:var(--text
   <div id="fx-rates" style="display:flex;align-items:center;gap:16px;"></div>
   <div class="fx-ts" id="fx-ts"></div>
 </div>
- 
+
 <div class="layout">
   <aside class="sidebar">
     <!-- STOCK SEARCH -->
@@ -283,9 +283,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg-deep);color:var(--text
       <div id="fx-sidebar"></div>
     </div>
   </aside>
- 
+
   <main class="main">
- 
+
     <!-- PICKER TAB -->
     <div class="tab-view active" id="tab-picker">
       <div class="picker-wrap">
@@ -335,7 +335,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg-deep);color:var(--text
         </div>
       </div>
     </div>
- 
+
     <!-- CHARTS TAB -->
     <div class="tab-view" id="tab-charts">
       <div class="charts-wrap">
@@ -346,7 +346,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg-deep);color:var(--text
         <div class="charts-grid" id="charts-grid"></div>
       </div>
     </div>
- 
+
     <!-- NEWS TAB -->
     <div class="tab-view" id="tab-news">
       <div class="news-wrap">
@@ -361,12 +361,12 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg-deep);color:var(--text
         <div id="news-list"><div class="news-empty">Loading latest news...</div></div>
       </div>
     </div>
- 
+
     <!-- MARKETS TAB -->
     <div class="tab-view" id="tab-markets">
       <div class="mkt-grid" id="mkt-grid"></div>
     </div>
- 
+
     <!-- PORTFOLIO TAB -->
     <div class="tab-view" id="tab-portfolio">
       <div class="pf-wrap">
@@ -413,10 +413,10 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg-deep);color:var(--text
         </div>
       </div>
     </div>
- 
+
   </main>
 </div>
- 
+
 <!-- SETTINGS MODAL -->
 <div class="overlay" id="settings-modal">
   <div class="modal">
@@ -486,7 +486,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg-deep);color:var(--text
     </div>
   </div>
 </div>
- 
+
 <script src="https://s3.tradingview.com/tv.js"></script>
 <script>
 // STATE
@@ -498,7 +498,7 @@ let AV_KEY = localStorage.getItem('nx_av') || '';
 let FMP_KEY = localStorage.getItem('nx_fmp') || '';
 let selRisk = 'Conservative';
 let holdings = [];
- 
+
 // DATA
 // NGX: No free public REST API exists. Prices shown via TradingView charts (live).
 // Sidebar shows last fetched price or "—". Click any stock to open live chart.
@@ -558,7 +558,7 @@ const RSS = {
   businessday:'https://businessday.ng/feed/',
   guardian:'https://guardian.ng/category/business/feed/'
 };
- 
+
 // INIT
 document.addEventListener('DOMContentLoaded',()=>{
   loadKeys();renderSidebar();renderQP();renderMkts();renderChartsGrid();
@@ -566,8 +566,52 @@ document.addEventListener('DOMContentLoaded',()=>{
   fetchLivePrices();setInterval(fetchLivePrices,300000);
   loadNews('nairametrics',document.querySelector('.src-btn'));
   document.getElementById('stock-q').addEventListener('keypress',e=>{if(e.key==='Enter')analyzeStock()});
+  // Show welcome card for new visitors on load
+  showWelcome();
 });
- 
+
+function showWelcome(){
+  const card=document.getElementById('res-card');
+  const dots=document.getElementById('dots');
+  const txt=document.getElementById('res-txt');
+  dots.style.display='none';
+  card.classList.add('on');
+  if(getActiveKey()){
+    // Key connected — show ready message
+    const engineNames={gemini:'Google Gemini (Free)',deepseek:'DeepSeek-V3 (~Free)',claude:'Anthropic Claude'};
+    txt.innerHTML=`<span style="color:var(--gold-light);font-weight:600">✅ Coach Ndubuisi is ready!</span>
+
+Your AI engine (<strong style="color:var(--text)">${engineNames[AI_ENGINE]||AI_ENGINE}</strong>) is connected and active.
+
+<strong style="color:var(--text)">How to use Nexfus:</strong>
+• Type any stock name or question in the box above and click <strong>Analyse ↗</strong>
+• Click any stock in the sidebar for instant analysis
+• Use the <strong>🔍 Search</strong> box to find any of 80+ stocks across NGX, JSE, NSE, GSE and US markets
+• Try the <strong>Quick Analysis</strong> buttons above for common queries
+• Visit <strong>Live Charts</strong> for real-time TradingView price charts
+• Visit <strong>News</strong> for live market news from Nairametrics & BusinessDay
+
+<span style="color:var(--text-muted);font-size:12px">Ask me anything — "Is GTCO a buy right now?", "Best NGX dividend stocks", "How do I hedge against naira depreciation?"</span>`;
+  } else {
+    // No key — guide them to set one up
+    txt.innerHTML=`<span style="color:var(--gold-light);font-weight:600">👋 Welcome to Nexfus Africa Stock Intelligence!</span>
+
+To activate Coach Ndubuisi's AI analysis, you need a free API key. It takes <strong style="color:var(--text)">60 seconds</strong>:
+
+<strong style="color:var(--green)">Option 1 — Google Gemini (100% Free, recommended)</strong>
+1. Go to <strong style="color:var(--teal)">aistudio.google.com/apikey</strong>
+2. Sign in with Google → click "Create API Key"
+3. Copy the key → click ⚙ above → paste → Save
+
+<strong style="color:#4A9EE8">Option 2 — DeepSeek (~Free, $2 = 20,000 queries)</strong>
+1. Go to <strong style="color:var(--teal)">platform.deepseek.com</strong>
+2. Sign up → API Keys → Create Key
+3. Copy the key → click ⚙ above → select DeepSeek → paste → Save
+
+<span style="color:var(--text-muted);font-size:12px">Live FX rates, TradingView charts, and market news are already working — no key needed for those.</span>`;
+  }
+}
+
 // KEYS & ENGINE
 function selectAI(engine){
   AI_ENGINE=engine;
@@ -617,7 +661,15 @@ function setSt(k,on){
   el.style.color=on?'var(--green)':'var(--text-muted)';
 }
 function updateLiveBadge(){
-  document.getElementById('live-badge').style.display=(GEMINI_KEY||DEEPSEEK_KEY||ANTHROPIC_KEY||AV_KEY||FMP_KEY)?'flex':'none';
+  // Badge = AI engine connected. Data keys (AV, FMP) don't count for this badge.
+  const aiReady=getActiveKey();
+  const badge=document.getElementById('live-badge');
+  if(aiReady){
+    badge.style.display='flex';
+    badge.textContent='⚡ AI READY';
+  } else {
+    badge.style.display='none';
+  }
 }
 function updateEngineLabel(){
   const el=document.getElementById('ai-engine-label');
@@ -645,29 +697,42 @@ function saveSettings(){
   setSt('av',!!AV_KEY);setSt('fmp',!!FMP_KEY);
   updateLiveBadge();updateEngineLabel();closeSettings();
 }
- 
-// FX
+
+// FX — primary: open.er-api.com, fallback: exchangerate-api.com (both free)
 async function fetchFX(){
-  try{
-    const r=await fetch('https://open.er-api.com/v6/latest/USD');
-    const d=await r.json();const rt=d.rates;
-    document.getElementById('fx-spin').style.display='none';
-    const pairs=[
-      {p:'USD/NGN',v:rt.NGN,dp:0},{p:'USD/ZAR',v:rt.ZAR,dp:2},
-      {p:'USD/KES',v:rt.KES,dp:2},{p:'USD/GHS',v:rt.GHS,dp:2},
-      {p:'EUR/NGN',v:rt.NGN/rt.EUR,dp:0},{p:'GBP/NGN',v:rt.NGN/rt.GBP,dp:0},
-    ];
-    document.getElementById('fx-rates').innerHTML=pairs.map((p,i)=>
-      `<div class="fx-item"><span class="fx-pair">${p.p}</span><span class="fx-rate">${p.v.toFixed(p.dp)}</span></div>${i<pairs.length-1?'<div class="fx-sep"></div>':''}`
-    ).join('');
-    document.getElementById('fx-ts').textContent='Updated '+new Date().toLocaleTimeString('en-NG',{hour:'2-digit',minute:'2-digit'});
-    // Sidebar FX
-    document.getElementById('fx-sidebar').innerHTML=`
-      ${wlItem('USD/NGN','Naira Rate','₦'+rt.NGN.toFixed(0),'Live','',false,true)}
-      ${wlItem('USD/ZAR','S.A. Rand','R'+rt.ZAR.toFixed(2),'Live','',false,true)}
-      ${wlItem('USD/KES','K. Shilling','KES '+rt.KES.toFixed(1),'Live','',false,true)}
-      ${wlItem('USD/GHS','Ghana Cedi','GHS '+rt.GHS.toFixed(2),'Live','',false,true)}`;
-  }catch(e){document.getElementById('fx-spin').textContent='FX unavailable'}
+  const sources=[
+    'https://open.er-api.com/v6/latest/USD',
+    'https://api.exchangerate-api.com/v4/latest/USD',
+  ];
+  let rt=null;
+  for(const url of sources){
+    try{
+      const r=await fetch(url);
+      const d=await r.json();
+      // Both APIs return rates under d.rates
+      if(d.rates&&d.rates.NGN){rt=d.rates;break;}
+    }catch(e){}
+  }
+  if(!rt){
+    document.getElementById('fx-spin').textContent='FX unavailable — retrying...';
+    setTimeout(fetchFX,30000);
+    return;
+  }
+  document.getElementById('fx-spin').style.display='none';
+  const pairs=[
+    {p:'USD/NGN',v:rt.NGN,dp:0},{p:'USD/ZAR',v:rt.ZAR,dp:2},
+    {p:'USD/KES',v:rt.KES,dp:2},{p:'USD/GHS',v:rt.GHS,dp:2},
+    {p:'EUR/NGN',v:rt.NGN/rt.EUR,dp:0},{p:'GBP/NGN',v:rt.NGN/rt.GBP,dp:0},
+  ];
+  document.getElementById('fx-rates').innerHTML=pairs.map((p,i)=>
+    `<div class="fx-item"><span class="fx-pair">${p.p}</span><span class="fx-rate">${p.v.toFixed(p.dp)}</span></div>${i<pairs.length-1?'<div class="fx-sep"></div>':''}`
+  ).join('');
+  document.getElementById('fx-ts').textContent='FX updated '+new Date().toLocaleTimeString('en-NG',{hour:'2-digit',minute:'2-digit'});
+  document.getElementById('fx-sidebar').innerHTML=`
+    ${wlItem('USD/NGN','Naira Rate','₦'+rt.NGN.toFixed(0),'Live','',false,true)}
+    ${wlItem('USD/ZAR','S.A. Rand','R'+rt.ZAR.toFixed(2),'Live','',false,true)}
+    ${wlItem('USD/KES','K. Shilling','KES '+rt.KES.toFixed(1),'Live','',false,true)}
+    ${wlItem('USD/GHS','Ghana Cedi','GHS '+rt.GHS.toFixed(2),'Live','',false,true)}`;
 }
 function wlItem(t,n,p,c,pos,clickable,noClick){
   const onclick=noClick?'style="cursor:default"':`onclick="quickAnalyze('${t}: ${n} analysis')"`;
@@ -676,7 +741,7 @@ function wlItem(t,n,p,c,pos,clickable,noClick){
     <div class="wl-right"><div class="wl-val">${p}</div><div class="wl-chg" style="color:var(--text-muted)">${c}</div></div>
   </div>`;
 }
- 
+
 // SIDEBAR
 function renderSidebar(){
   // NGX — shows "—" until TradingView chart is opened or prices fetch partially
@@ -688,7 +753,7 @@ function renderSidebar(){
         <div class="wl-chg" id="c-${s.t}" style="color:var(--dim);font-size:10px">chart ↗</div>
       </div>
     </div>`).join('');
- 
+
   // Pan-African — JSE/NSE prices fetched via Yahoo Finance
   document.getElementById('africa-list').innerHTML=AFRICA.map(s=>`
     <div class="wl-item" onclick="quickAnalyze('${s.t}: Analyse ${s.n} for me')">
@@ -698,7 +763,7 @@ function renderSidebar(){
         <div class="wl-chg" id="c-${s.t}" style="color:var(--text-muted)">—</div>
       </div>
     </div>`).join('');
- 
+
   // US Stocks — Yahoo Finance direct (live)
   document.getElementById('us-list').innerHTML=US_STOCKS.map(s=>`
     <div class="wl-item" onclick="quickAnalyze('${s.t}: Analyse ${s.n} and what it means for Nigerian investors looking for US exposure')">
@@ -709,7 +774,7 @@ function renderSidebar(){
       </div>
     </div>`).join('');
 }
- 
+
 // LIVE PRICES
 // Strategy:
 //   NGX  → Yahoo Finance v8 chart API with .LG suffix (partial coverage, best effort)
@@ -732,31 +797,31 @@ async function fetchOnePriceYF(yf){
     };
   }catch(e){return null}
 }
- 
+
 async function fetchLivePrices(){
   const currencyPrefix={'NGN':'₦','ZAR':'R ','KES':'KES ','GHS':'GHS ','USD':'$','GBP':'£','EUR':'€'}
- 
+
   // Fetch all in parallel
   const allFetches=[
     ...NGX.map(s=>fetchOnePriceYF(s.yf).then(r=>({stock:s,r,group:'ngx'}))),
     ...AFRICA.filter(s=>s.yf).map(s=>fetchOnePriceYF(s.yf).then(r=>({stock:s,r,group:'africa'}))),
     ...US_STOCKS.map(s=>fetchOnePriceYF(s.yf).then(r=>({stock:s,r,group:'us'}))),
   ];
- 
+
   const results=await Promise.allSettled(allFetches);
   let updated=0;
- 
+
   results.forEach(res=>{
     if(res.status!=='fulfilled'||!res.value) return;
     const {stock,r,group}=res.value;
     if(!r||!r.price) return;
- 
+
     const pre=currencyPrefix[r.currency]||'';
     const chgPct=r.prevClose?((r.price-r.prevClose)/r.prevClose*100):0;
     const isPos=chgPct>=0;
     const priceStr=pre+r.price.toLocaleString('en',{minimumFractionDigits:2,maximumFractionDigits:2});
     const chgStr=(isPos?'+':'')+chgPct.toFixed(2)+'%';
- 
+
     const pEl=document.getElementById('p-'+stock.t);
     const cEl=document.getElementById('c-'+stock.t);
     if(pEl){pEl.textContent=priceStr;pEl.style.fontSize='';}
@@ -764,12 +829,12 @@ async function fetchLivePrices(){
     stock.p=r.price.toFixed(2);stock.c=chgStr;stock.pos=isPos;
     updated++;
   });
- 
+
   // Timestamp update
   const ts=new Date().toLocaleTimeString('en-NG',{hour:'2-digit',minute:'2-digit'});
   const fxTs=document.getElementById('fx-ts');
   if(fxTs) fxTs.textContent=`FX & US prices updated ${ts}${updated>0?' · '+updated+' stocks live':''}`;
- 
+
   // For NGX stocks that returned no data, add a note pointing to TradingView chart
   NGX.forEach(s=>{
     const pEl=document.getElementById('p-'+s.t);
@@ -780,12 +845,12 @@ async function fetchLivePrices(){
     }
   });
 }
- 
+
 // QUICK PICKS
 function renderQP(){
   document.getElementById('qp-grid').innerHTML=QP.map(q=>`<button class="qp-btn" onclick="quickAnalyze('${q.l}')">${q.i}<br>${q.l}</button>`).join('');
 }
- 
+
 // MARKETS
 function renderMkts(){
   document.getElementById('mkt-grid').innerHTML=MKTS.map(m=>`
@@ -798,7 +863,7 @@ function renderMkts(){
       <button class="mkt-btn" onclick="quickAnalyze('Give me a comprehensive market outlook and top stock picks for the ${m.e} (${m.c})')">Ask Coach about ${m.e} ↗</button>
     </div>`).join('');
 }
- 
+
 // CHARTS GRID
 function renderChartsGrid(){
   document.getElementById('charts-grid').innerHTML=CHARTS_CFG.map((c,i)=>`
@@ -819,7 +884,7 @@ function renderChartsGrid(){
     }));
   },400);
 }
- 
+
 function updateChart(sym){
   // Show only ticker part (e.g. "DANGCEM" not "NGX:DANGCEM")
   const label = sym.includes(':') ? sym.split(':')[1] : sym;
@@ -833,7 +898,7 @@ function updateChart(sym){
     });
   }
 }
- 
+
 // NEWS
 async function loadNews(src,btn){
   document.querySelectorAll('.src-btn').forEach(b=>b.classList.remove('active'));
@@ -869,7 +934,7 @@ async function loadNews(src,btn){
   }
 }
 function askNews(ttl){quickAnalyze(`This news headline just came out: "${ttl}" — What does this mean for Nigerian/African investors and which stocks could be affected?`)}
- 
+
 // TAB NAV
 function showTab(name,btn){
   document.querySelectorAll('.tab-view').forEach(t=>t.classList.remove('active'));
@@ -877,25 +942,25 @@ function showTab(name,btn){
   document.getElementById('tab-'+name).classList.add('active');
   btn.classList.add('active');
 }
- 
+
 // STOCK PICKER
 function quickAnalyze(q){
   document.getElementById('stock-q').value=q;
   showTab('picker',document.querySelectorAll('.nav-pill')[0]);
   analyzeStock();
 }
- 
+
 // AI CALL — shared system prompt builder
 function buildSysPrompt(fxCtx,liveCtx){
   return `You are Coach Ndubuisi Okonkwo, a legendary Nigerian investment coach with 30 years of battle-tested experience across the NGX, JSE, GSE, NSE, EGX, BRVM, Wall Street, and global markets. You started as a Lagos stockbroker in the 1990s, survived the 2008/09 NGX crash, and have coached hundreds of Nigerians to build billion-naira portfolios.
- 
+
 Voice: sharp, authoritative, results-driven, profit-first. Back every position with numbers — P/E ratios, dividend yields, EPS growth, sector analysis. Ground advice in Nigerian financial reality: naira inflation, FX, CBN policy, real vs nominal returns.
- 
+
 Benchmarks: NGX ASI ~15–20% historical annual return; Nigerian T-bills ~300–600bps below MPR; S&P 500 ~10% long-term; Nigerian inflation ~25–35% recent; CBN MPR ~27%.${fxCtx}${liveCtx}
- 
+
 Format with clear labelled sections. Use ₦ for naira, $ for dollar. Be specific, data-driven, actionable. End with one coaching sign-off. ~400 words. Use line breaks for readability.`;
 }
- 
+
 async function callAI(systemPrompt, userMessage){
   if(AI_ENGINE==='gemini' && GEMINI_KEY){
     const url=`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_KEY}`;
@@ -946,14 +1011,14 @@ async function callAI(systemPrompt, userMessage){
   }
   return null;
 }
- 
+
 function getActiveKey(){
   if(AI_ENGINE==='gemini') return GEMINI_KEY;
   if(AI_ENGINE==='deepseek') return DEEPSEEK_KEY;
   if(AI_ENGINE==='claude') return ANTHROPIC_KEY;
   return null;
 }
- 
+
 // Smart error message helper — detects quota/rate limit and gives actionable advice
 function friendlyError(e){
   const msg=(e.message||'').toLowerCase();
@@ -961,27 +1026,27 @@ function friendlyError(e){
   const isKey=msg.includes('api key') || msg.includes('invalid') || msg.includes('unauthorized') || msg.includes('403');
   if(isQuota && AI_ENGINE==='gemini'){
     return `<span style="color:var(--gold-light);font-weight:500">⏱️ Gemini Free Tier Limit Reached</span>
- 
+
 The free Gemini tier allows 15 requests/minute and 1,500/day. You've hit that limit.
- 
+
 <strong style="color:var(--text-primary)">Fix options (pick one):</strong>
- 
+
 1. <strong>Wait ~10 seconds</strong> and try again — rate limits reset quickly
 2. <strong>Switch to DeepSeek</strong> — click ⚙ Settings → select ◈ DeepSeek → get a free key at <span style="color:#4A9EE8">platform.deepseek.com</span> ($2 credit = ~20,000 queries, never hits limits)
 3. <strong>Switch to Claude</strong> — click ⚙ Settings → select ◆ Claude → key from console.anthropic.com
- 
+
 <span style="color:var(--dim);font-size:11px">DeepSeek is recommended as your backup — it's virtually free and has no daily limits.</span>`;
   }
   if(isKey){
     return `<span style="color:var(--red);font-weight:500">🔑 Invalid API Key</span>
- 
+
 Your ${AI_ENGINE} API key was rejected. Please check:\n• The key was copied fully with no extra spaces\n• The key is active in your dashboard\n• You selected the right engine in Settings
- 
+
 Click ⚙ to re-enter your key.`;
   }
   return `<span class="err">Error: ${e.message||'Connection failed. Check your API key and network.'}</span>`;
 }
- 
+
 async function analyzeStock(){
   const q=document.getElementById('stock-q').value.trim();if(!q)return;
   const card=document.getElementById('res-card');
@@ -989,7 +1054,7 @@ async function analyzeStock(){
   const txt=document.getElementById('res-txt');
   const btn=document.getElementById('go-btn');
   card.classList.add('on');dots.style.display='flex';txt.textContent='';btn.disabled=true;
- 
+
   // Show chart for known tickers
   const ticker=[...NGX,...AFRICA].find(s=>q.toUpperCase().includes(s.t));
   if(ticker){
@@ -997,7 +1062,7 @@ async function analyzeStock(){
     document.getElementById('chart-sel').value=ticker.tv;
     updateChart(ticker.tv);
   }
- 
+
   // No key set
   if(!getActiveKey()){
     dots.style.display='none';
@@ -1010,11 +1075,11 @@ async function analyzeStock(){
     txt.innerHTML=`<span style="color:var(--gold-light);font-weight:500">⚙️ API Key Required</span>\n\nTo use Coach Ndubuisi's AI analysis, add your ${info.name} key:\n\n1. Click the ⚙ gear icon (top right)\n2. ${info.hint}\n3. Paste it in the key field and click Save\n\n<span style="color:var(--text-muted);font-size:12px">You can switch between Gemini (free), DeepSeek (~free), and Claude in Settings anytime.</span>`;
     btn.disabled=false;return;
   }
- 
+
   const fxEl=document.querySelector('#fx-rates .fx-item .fx-rate');
   const fxCtx=fxEl?`\nCurrent live USD/NGN rate: ${fxEl.textContent}`:'';
   const liveCtx=(AV_KEY?'\nAlpha Vantage connected.':``)+(FMP_KEY?'\nFMP connected for NGX fundamentals.':'');
- 
+
   try{
     const result=await callAI(buildSysPrompt(fxCtx,liveCtx),q);
     dots.style.display='none';
@@ -1026,7 +1091,7 @@ async function analyzeStock(){
   }
   btn.disabled=false;
 }
- 
+
 async function stream(el,text){
   const cur=document.createElement('span');cur.className='cursor';el.appendChild(cur);
   const chars=text.split('');let i=0;
@@ -1037,7 +1102,7 @@ async function stream(el,text){
     },10);
   });
 }
- 
+
 // PORTFOLIO
 function setRisk(el,r){document.querySelectorAll('.risk-opt').forEach(x=>x.classList.remove('active'));el.classList.add('active');selRisk=r;document.getElementById('s-risk').textContent=r}
 function addH(){holdings.push({id:Date.now()});renderH()}
@@ -1074,13 +1139,13 @@ async function buildPF(){
   const q=`Analyse my portfolio:\nHoldings: ${sum}\nRisk: ${selRisk}\nGoal: ${goal||'Long-term wealth building'}\n\nProvide: 1) Diversification analysis, 2) Strengths & risks per holding, 3) Recommended additions or swaps, 4) Projected return range.`;
   const card=document.getElementById('pf-res');const dots=document.getElementById('pf-dots');const txt=document.getElementById('pf-txt');const btn=document.getElementById('bld-btn');
   card.classList.add('on');dots.style.display='flex';txt.textContent='';btn.disabled=true;
- 
+
   if(!getActiveKey()){
     dots.style.display='none';
     txt.innerHTML=`<span style="color:var(--gold-light);font-weight:500">⚙️ API Key Required</span>\n\nPlease add your AI key in Settings (⚙ top right) to enable portfolio analysis.`;
     btn.disabled=false;return;
   }
- 
+
   const pfSys=`You are Coach Ndubuisi Okonkwo, legendary Nigerian investment coach, 30 years NGX & global markets experience. Analyse this portfolio with sharp, data-driven, actionable advice. Be specific about NGX stocks, naira/dollar allocation, sector concentration, and realistic return expectations in both naira and dollar terms. Format with clear labelled sections. End with your signature coaching sign-off. ~450 words.`;
   try{
     const result=await callAI(pfSys,q);
@@ -1093,7 +1158,7 @@ async function buildPF(){
   }
   btn.disabled=false;
 }
- 
+
 // ===================== STOCK DATABASE & SEARCH =====================
 const STOCK_DB = [
   // NGX — Nigeria
@@ -1188,7 +1253,7 @@ const STOCK_DB = [
   {t:'VTI',n:'Vanguard Total Market ETF',e:'US',tv:'AMEX:VTI'},
   {t:'IEMG',n:'iShares Core EM ETF',e:'US',tv:'AMEX:IEMG'},
 ];
- 
+
 function runSearch(q){
   const box=document.getElementById('search-results');
   const val=(q||'').trim().toLowerCase();
@@ -1211,7 +1276,7 @@ function runSearch(q){
       </div>`).join('');
   box.classList.add('open');
 }
- 
+
 function selectStock(ticker,name,tvSymbol,exchange){
   document.getElementById('search-results').classList.remove('open');
   document.getElementById('sb-search').value='';
@@ -1226,7 +1291,7 @@ function selectStock(ticker,name,tvSymbol,exchange){
   document.getElementById('stock-q').value=q;
   analyzeStock();
 }
- 
+
 function searchKey(e){
   if(e.key==='Escape'){
     document.getElementById('search-results').classList.remove('open');
@@ -1237,7 +1302,7 @@ function searchKey(e){
     if(first)first.click();
   }
 }
- 
+
 document.addEventListener('click',e=>{
   const wrap=document.getElementById('sb-search')?.closest('.sb-search-wrap');
   if(wrap&&!wrap.contains(e.target)){
